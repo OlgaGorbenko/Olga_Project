@@ -1,0 +1,9 @@
+Flask-WTF==0.15.1
+python-dotenv==0.17.1
+Jinja2==3.0.1
+WTForms==2.3.3
+Flask-SQLAlchemy==2.5.1
+SQLAlchemy==1.4.17
+Flask-Migrate==3.0.1
+python-dateutil==2.8.1
+python-editor==1.0.4
