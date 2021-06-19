@@ -1,5 +1,5 @@
-from blog_app.app_factory import app, db
-from blog_app.models import User, Post
+from food_app.app_factory import app, db
+from food_app.models import User, Post
 
 
 def add_user():

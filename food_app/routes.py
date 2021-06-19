@@ -1,5 +1,5 @@
 from .app_factory import app
-from blog_app.forms import LoginForm
+from food_app.forms import LoginForm
 
 from flask import render_template, flash, redirect, url_for
 
