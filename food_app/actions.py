@@ -1,5 +1,13 @@
 from food_app.app_factory import app, db
-from food_app.models import Product
+from food_app.models import User, Product
+
+
+# def add_user():
+#     user = User(username='lin', email='lin@example.com')
+#     user.set_password('cat')
+#     db.session.add(user)
+#     db.session.commit()
+#     return user
 
 
 def add_product():

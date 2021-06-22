@@ -5,7 +5,7 @@ import food_app.routes
 from food_app.app_factory import app, db
 from food_app.models import Product
 
-from food_app.actions import add_product
+# from food_app.actions import add_user
 
 
 # @app.shell_context_processor
@@ -13,7 +13,8 @@ from food_app.actions import add_product
 #     return {'db': db, 'User': User, 'Post': Post}
 
 
-add_product()
+# add_user()
 
 if __name__ == '__main__':
     app.run()
+
