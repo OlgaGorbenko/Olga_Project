@@ -36,39 +36,38 @@ class Product(db.Model):
         return '<Product {}>'.format(self.title)
 
 
-class ShoppingList(db.Model):
-    title = db.Column(db.String(256), index=True, unique=True, primary_key=True)  # pkey?
-    owner = db.Column(db.String, db.ForeignKey('user.id'))
-    items = db.relationship('ShoppingListItem') #backref='author', lazy='dynamic'
+# class ShoppingList(db.Model):
+#     title = db.Column(db.String(256), index=True, unique=True, primary_key=True)  # pkey?
+#     owner = db.Column(db.String, db.ForeignKey('user.id'))
+#     items = db.relationship('ShoppingListItem') #backref='author', lazy='dynamic'
+#
+#     def __repr__(self):
+#         return '<Product {}>'.format(self.title)
 
-    def __repr__(self):
-        return '<Product {}>'.format(self.title)
-
-class ShoppingListItem(db.Model):
-    shopping_list = db.Column(db.String, db.ForeignKey('shopping_list.title'))  #?? # pkey?
-    product = db.Column(db.String, db.ForeignKey('product.id'))
-    quantity = db.Column(db.Integer, index=True)
-    unit_of_measure = db.Column(db.String(120), index=True)
-    is_buyed = db.Column(db.Bool, index=True)
-
-    def __repr__(self):
-        return '<Product {}>'.format(self.shopping_list)  #?
-
-class Recipe(db.Model):
-    title = db.Column(db.String(256), index=True, unique=True, primary_key=True)  # pkey?
-    ingredients = db.relationship('Ingredient') #backref='author', lazy='dynamic'
-
-    def __repr__(self):
-        return '<Product {}>'.format(self.title)
-
-class Ingredient(db.Model):
-    recipe = db.Column(db.String, db.ForeignKey('recipe.title'))  # pkey?
-    product = db.Column(db.String, db.ForeignKey('product.id'))
-    quantity = db.Column(db.Integer, index=True)
-    unit_of_measure = db.Column(db.String(120), index=True)
-
-    def __repr__(self):
-        return '<Product {}>'.format(self.recipe)  #?
+# class ShoppingListItem(db.Model):
+#     shopping_list = db.Column(db.String, db.ForeignKey('shopping_list.title'))  #?? # pkey?
+#     product = db.Column(db.String, db.ForeignKey('product.id'))
+#     quantity = db.Column(db.Integer, index=True)
+#     is_buyed = db.Column(db.Bool, index=True)
+#
+#     def __repr__(self):
+#         return '<Product {}>'.format(self.shopping_list)  #?
+#
+# class Recipe(db.Model):
+#     title = db.Column(db.String(256), index=True, unique=True, primary_key=True)  # pkey?
+#     ingredients = db.relationship('Ingredient') #backref='author', lazy='dynamic'
+#
+#     def __repr__(self):
+#         return '<Product {}>'.format(self.title)
+#
+# class Ingredient(db.Model):
+#     recipe = db.Column(db.String, db.ForeignKey('recipe.title'))  # pkey?
+#     product = db.Column(db.String, db.ForeignKey('product.id'))
+#     quantity = db.Column(db.Integer, index=True)
+#     unit_of_measure = db.Column(db.String(120), index=True)
+#
+#     def __repr__(self):
+#         return '<Product {}>'.format(self.recipe)  #?
 
 
 
