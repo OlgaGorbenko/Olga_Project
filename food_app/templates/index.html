@@ -5,13 +5,16 @@
     {% for post in posts %}
     <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
     {% endfor %}
+
+    <p>Hello world</p>
+
 {% endblock %}
 
 
-{% extends 'admin/master.html' %}
+<!--{% extends 'admin/master.html' %}-->
 <!--is it necessary?-->
 
-{% block body %}
-  <p>Hello world</p>
-{% endblock %}
+<!--{% block body %}-->
+<!--  <p>Hello world</p>-->
+<!--{% endblock %}-->
 

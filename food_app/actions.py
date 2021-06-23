@@ -20,7 +20,7 @@ def add_product():
 def return_all_products():
     products = Product.query.all()
     for product in products:
-        print(product.id, product.product_name, product.type_of_product)
+        print(product.id, product.title, product.type_of_product)
 
 
 def return_product():
