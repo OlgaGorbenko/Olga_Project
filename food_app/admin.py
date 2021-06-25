@@ -8,8 +8,6 @@ from food_app.models import User
 
 
 # class MicroBlogModelView(ModelView):
-#     can_delete = False  # disable model deletion
-#     page_size = 50  # the number of entries to display on the list view
 
 
 class MicroBlogModelView(sqla.ModelView):
