@@ -3,7 +3,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user
 from werkzeug.utils import redirect
 
-from food_app.models import User, Product
+from food_app.models import User, Product, Recipe, Ingredient, ShoppingList, ShoppingListItem
 from .app_factory import admin, db
 
 
@@ -27,6 +27,26 @@ class MicroBlogModelView(ModelView):
         }
     }
     can_export = True
+    form_choices = {
+        'unit_of_measure': [
+            ('gram', 'g'),
+            ('milliliter', 'mL'),
+            ('piece', 'pc')
+        ],
+        'type_of_product': [
+            ('fruit', 'fruit'),
+            ('vegetable', 'vegetable'),
+            ('meet', 'meet'),
+            ('fish', 'fish'),
+            ('milk', 'milk'),
+            ('grain', 'grain'),
+            ('sweets', 'sweets'),
+            ('spice and souse', 'spice and souse'),
+            ('beverage', 'beverage'),
+            ('other', 'other')
+        ]
+    }
+
 
     def is_accessible(self):
         return current_user.is_authenticated
@@ -36,5 +56,20 @@ class MicroBlogModelView(ModelView):
         return redirect(url_for('login', next=request.url))
 
 
+class RecipeAdminView(MicroBlogModelView):
+    # inline_models = ((Ingredient, dict(form_columns=['title'])), )
+    inline_models = (Ingredient,)
+    form_choices = {
+        'unit_of_measure': [
+            ('gram', 'g'),
+            ('milliliter', 'mL'),
+            ('piece', 'piece')
+        ]
+    }
+# TODO to find connection between inline_models and form_choices
+
 admin.add_view(MicroBlogModelView(User, db.session))
 admin.add_view(MicroBlogModelView(Product, db.session))
+admin.add_view(RecipeAdminView(Recipe, db.session))
+admin.add_view(MicroBlogModelView(ShoppingList, db.session))
+

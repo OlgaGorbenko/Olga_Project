@@ -34,6 +34,9 @@ class Product(db.Model):
     def __repr__(self):
         return '<Product {}>'.format(self.title)
 
+    def __str__(self):
+        return f'Product: {self.title}'
+
 
 class ShoppingList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -66,7 +69,8 @@ class Recipe(db.Model):
 class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     recipe_id = db.Column(db.ForeignKey('recipe.id'))
-    product = db.Column(db.ForeignKey('product.id'))
+    product_id = db.Column(db.ForeignKey('product.id'))
+    product = db.relationship('Product')
     quantity = db.Column(db.Integer)
     unit_of_measure = db.Column(db.String(120))
 
