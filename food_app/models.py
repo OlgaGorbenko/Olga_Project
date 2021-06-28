@@ -6,8 +6,8 @@ from .app_factory import db, login
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), index=True, unique=True)
-    email = db.Column(db.String(120), index=True, unique=True)
+    username = db.Column(db.String(64), index=True, unique=True, nullable=False)
+    email = db.Column(db.String(120), index=True, unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
     # posts = db.relationship('Post', backref='author', lazy='dynamic')
 
@@ -27,7 +27,7 @@ def load_user(id):
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(256), index=True, unique=True)
+    title = db.Column(db.String(256), index=True, unique=True, nullable=False)
     type_of_product = db.Column(db.String(120))
     unit_of_measure = db.Column(db.String(120))
 
@@ -35,12 +35,12 @@ class Product(db.Model):
         return '<Product {}>'.format(self.title)
 
     def __str__(self):
-        return f'Product: {self.title}'
+        return f'{self.title}'.capitalize()  # Big first letter only.
 
 
 class ShoppingList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(256))
+    title = db.Column(db.String(256), default='')
     owner = db.Column(db.ForeignKey('user.id'))
     items = db.relationship('ShoppingListItem', backref='shopping_list', lazy='dynamic')
 
@@ -60,11 +60,16 @@ class ShoppingListItem(db.Model):
 
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(256), index=True, unique=True)
+    title = db.Column(db.String(256), index=True, unique=True, nullable=False)
     ingredients = db.relationship('Ingredient', backref='recipe', lazy='dynamic')
+    description = db.Column(db.Text)
 
     def __repr__(self):
         return '<Recipe {}>'.format(self.title)
+
+    def __str__(self):
+        return f'{self.title}'.title()   # All first letters are big.
+
 
 class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
