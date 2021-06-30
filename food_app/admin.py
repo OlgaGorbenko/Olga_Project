@@ -3,6 +3,8 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin.model.form import InlineFormAdmin
 from flask_login import current_user
 from werkzeug.utils import redirect
+from .constants import units_of_measure
+
 
 from food_app.models import User, Product, Recipe, Ingredient, ShoppingList
 from .app_factory import admin, db
@@ -28,12 +30,30 @@ class MicroBlogModelView(ModelView):
         }
     }
     can_export = True
+
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        # redirect to login page if user doesn't have access
+        return redirect(url_for('login', next=request.url))
+
+
+class IngredientInlineModelForm(InlineFormAdmin):
+    # form_columns = ('title', 'date')
     form_choices = {
-        'unit_of_measure': [
-            ('gram', 'g'),
-            ('milliliter', 'mL'),
-            ('piece', 'pc')
-        ],
+        'unit_of_measure': units_of_measure,
+    }
+
+
+class RecipeAdminView(MicroBlogModelView):
+    # inline_models = ((Ingredient, dict(form_columns=['title'])), )
+    inline_models = (IngredientInlineModelForm(Ingredient),)
+
+
+class ProductAdminView(MicroBlogModelView):
+    form_choices = {
+        'unit_of_measure': units_of_measure,
         'type_of_product': [
             ('fruit', 'fruit'),
             ('vegetable', 'vegetable'),
@@ -44,39 +64,12 @@ class MicroBlogModelView(ModelView):
             ('sweets', 'sweets'),
             ('spice and souse', 'spice and souse'),
             ('beverage', 'beverage'),
-            ('other', 'other')
-        ]
+            ('other', 'other'),
+        ],
     }
-
-    def is_accessible(self):
-        return current_user.is_authenticated
-
-    def inaccessible_callback(self, name, **kwargs):
-        # redirect to login page if user doesn't have access
-        return redirect(url_for('login', next=request.url))
-
-
-class RecipeAdminView(MicroBlogModelView):
-    # inline_models = ((Ingredient, dict(form_columns=['title'])), )
-    inline_models = (Ingredient,)
-
-
-class IngredientInlineModelForm(InlineFormAdmin):
-    # form_columns = ('title', 'date')
-    form_choices = {
-        'unit_of_measure': [
-            ('gram', 'g'),
-            ('milliliter', 'mL'),
-            ('piece', 'pc')
-        ]
-    }
-
-
-class MyMicroBlogModelView(MicroBlogModelView):
-    inline_models = (IngredientInlineModelForm(Ingredient),)
 
 
 admin.add_view(MicroBlogModelView(User, db.session))
-admin.add_view(MicroBlogModelView(Product, db.session))
+admin.add_view(ProductAdminView(Product, db.session))
 admin.add_view(RecipeAdminView(Recipe, db.session))
 admin.add_view(MicroBlogModelView(ShoppingList, db.session))
