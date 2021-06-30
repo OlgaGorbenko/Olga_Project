@@ -4,7 +4,7 @@ from flask_admin.model.form import InlineFormAdmin
 from flask_login import current_user
 from werkzeug.utils import redirect
 
-from food_app.models import User, Product, Recipe, Ingredient, ShoppingList
+from food_app.models import User, Product, Recipe, Ingredient, ShoppingList, ShoppingListItem
 from .app_factory import admin, db
 from .constants import units_of_measure
 
@@ -45,6 +45,12 @@ class IngredientInlineModelForm(InlineFormAdmin):
     }
 
 
+class ShoppingListItemInlineModelForm(InlineFormAdmin):
+    form_choices = {
+        'unit_of_measure': units_of_measure,
+    }
+
+
 class RecipeAdminView(MicroBlogModelView):
     # inline_models = ((Ingredient, dict(form_columns=['title'])), )
     inline_models = (IngredientInlineModelForm(Ingredient),)
@@ -68,8 +74,8 @@ class ProductAdminView(MicroBlogModelView):
     }
 
 
-# class ShoppingListAdminView(MicroBlogModelView):  ok!
-    # inline_models = (IngredientInlineModelForm(Ingredient),)  ?? items instead ingredients
+class ShoppingListAdminView(MicroBlogModelView):
+    inline_models = (ShoppingListItemInlineModelForm(ShoppingListItem),)
 
 
 admin.add_view(MicroBlogModelView(User, db.session))

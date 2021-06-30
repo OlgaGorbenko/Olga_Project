@@ -53,6 +53,7 @@ class ShoppingListItem(db.Model):
     product_id = db.Column(db.ForeignKey('product.id'))
     product = db.relationship('Product')
     quantity = db.Column(db.Integer)
+    unit_of_measure = db.Column(db.String(120))
     is_buyed = db.Column(db.Boolean)
 
     def __repr__(self):
@@ -62,7 +63,7 @@ class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(256), index=True, unique=True, nullable=False)
     ingredients = db.relationship('Ingredient', backref='recipe', lazy='dynamic')
-    # description = db.Column(db.Text)
+    description = db.Column(db.Text)
 
     def __repr__(self):
         return '<Recipe {}>'.format(self.title)
