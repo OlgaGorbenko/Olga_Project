@@ -59,6 +59,8 @@ class ShoppingListItem(db.Model):
     def __repr__(self):
         return f'<ShoppingListItem {self.product.title}>'
 
+
+
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(256), index=True, unique=True, nullable=False)
