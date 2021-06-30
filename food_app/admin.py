@@ -3,11 +3,10 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin.model.form import InlineFormAdmin
 from flask_login import current_user
 from werkzeug.utils import redirect
-from .constants import units_of_measure
-
 
 from food_app.models import User, Product, Recipe, Ingredient, ShoppingList
 from .app_factory import admin, db
+from .constants import units_of_measure
 
 
 class MicroBlogModelView(ModelView):
@@ -67,6 +66,10 @@ class ProductAdminView(MicroBlogModelView):
             ('other', 'other'),
         ],
     }
+
+
+# class ShoppingListAdminView(MicroBlogModelView):  ok!
+    # inline_models = (IngredientInlineModelForm(Ingredient),)  ?? items instead ingredients
 
 
 admin.add_view(MicroBlogModelView(User, db.session))
