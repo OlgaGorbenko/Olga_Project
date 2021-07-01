@@ -39,7 +39,6 @@ class MicroBlogModelView(ModelView):
 
 
 class IngredientInlineModelForm(InlineFormAdmin):
-    # form_columns = ('title', 'date')
     form_choices = {
         'unit_of_measure': units_of_measure,
     }
