@@ -45,7 +45,7 @@ class ShoppingList(db.Model):
     title = db.Column(db.String(256), default='')
     owner = db.Column(db.ForeignKey('user.id'))
     items = db.relationship('ShoppingListItem', backref='shopping_list', lazy='dynamic')
-    # notes = db.Column(db.Text)
+    notes = db.Column(db.Text)
 
     def __repr__(self):
         return '<ShoppingList {}>'.format(self.title)
