@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
-from food_app.forms import LoginForm, RegistrationForm
+from food_app.forms import LoginForm, RegistrationForm, ShoppingListForm
 from food_app.models import User
 from .app_factory import app, db
 
@@ -62,3 +62,13 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+@app.route('/shopping_list', methods = ['GET', 'POST'])
+@login_required
+def shopping_list():
+    if request.method == 'GET':
+        return render_template("shopping_list.html", title='Shopping List')
+    form = ShoppingListForm()
+
+    # return render_template("shopping_list.html", title='Shopping List')
