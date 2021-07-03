@@ -64,11 +64,11 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/shopping_list', methods = ['GET', 'POST'])
+@app.route('/shopping_list', methods=['GET', 'POST'])
 @login_required
 def shopping_list():
     if request.method == 'GET':
         return render_template("shopping_list.html", title='Shopping List')
     form = ShoppingListForm()
 
-    # return render_template("shopping_list.html", title='Shopping List')
+
