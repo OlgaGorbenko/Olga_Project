@@ -80,4 +80,4 @@ class ShoppingListAdminView(MicroBlogModelView):
 admin.add_view(MicroBlogModelView(User, db.session))
 admin.add_view(ProductAdminView(Product, db.session))
 admin.add_view(RecipeAdminView(Recipe, db.session))
-admin.add_view(MicroBlogModelView(ShoppingList, db.session))
+admin.add_view(ShoppingListAdminView(ShoppingList, db.session))
