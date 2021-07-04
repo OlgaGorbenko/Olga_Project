@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
-from food_app.models import User, Product
+from food_app.models import User, Product, Recipe
 
 
 class LoginForm(FlaskForm):
@@ -40,12 +40,24 @@ class ProductForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     type_of_product = StringField('Type of Product')
     unit_of_measure = StringField('Unit of Measure')
-    submit = SubmitField('Create')
+    submit = SubmitField('   Add   ')
 
     def validate_title(self, title):
         product = Product.query.filter_by(title=title.data).first()
         if product is not None:
-            raise ValidationError('Please use a different title.')
+            raise ValidationError('This title already exists.')
+
+
+class RecipeForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    ingredients = StringField('Ingredients')
+    description = TextField('Description')
+    submit = SubmitField('   Add   ')
+
+    def validate_title(self, title):
+        recipe = Recipe.query.filter_by(title=title.data).first()
+        if recipe is not None:
+            raise ValidationError('This title already exists.')
 
 
 

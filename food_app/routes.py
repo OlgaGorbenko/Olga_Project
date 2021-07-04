@@ -2,8 +2,8 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
-from food_app.forms import LoginForm, RegistrationForm, ShoppingListForm, ProductForm
-from food_app.models import User, Product
+from food_app.forms import LoginForm, RegistrationForm, ShoppingListForm, ProductForm, RecipeForm
+from food_app.models import User, Product, Recipe
 from .app_factory import app, db
 
 
@@ -81,9 +81,39 @@ def product():
         return render_template("product.html", title='Product', form=form)
     if form.validate_on_submit():
         product = Product(title=form.title.data, type_of_product=form.type_of_product.data, unit_of_measure=form.unit_of_measure.data)
-        # user.set_password(form.password.data)
         db.session.add(product)
         db.session.commit()
-        flash('Congratulations, you are now add product!')
+        flash('New recipe has been successfully added!!')
         return redirect(url_for('product'))
     return render_template('product.html', title='Product', form=form)
+
+
+# @app.route('/product', methods=['GET', 'POST'])
+# @login_required
+# def show_products():
+#     products = Product.query.all()
+#     return render_template('show_products.html', products= )
+#
+# def return_all_products():
+#     products = Product.query.all()
+#     for product in products:
+#         print(product.id, product.title, product.type_of_product)
+
+
+
+
+
+@app.route('/recipe', methods=['GET', 'POST'])
+@login_required
+def recipe():
+    form = RecipeForm()
+    if request.method == 'GET':
+        return render_template("recipe.html", title='Recipe', form=form)
+    if form.validate_on_submit():
+        recipe = Recipe(title=form.title.data, ingredients=form.ingredients.data, description=form.description.data)
+        db.session.add(recipe)
+        db.session.commit()
+        flash('New recipe has been successfully added!')
+        return redirect(url_for('recipe'))
+    return render_template('recipe.html', title='Recipe', form=form)
+
