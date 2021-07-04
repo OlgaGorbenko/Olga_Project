@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
-from food_app.models import User
+from food_app.models import User, Product
 
 
 class LoginForm(FlaskForm):
@@ -34,6 +34,21 @@ class RegistrationForm(FlaskForm):
 class ShoppingListForm(FlaskForm):
     title = StringField('Title')
     submit = SubmitField('Create')
+
+
+class ProductForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    type_of_product = StringField('Type of Product')
+    unit_of_measure = StringField('Unit of Measure')
+    submit = SubmitField('Create')
+
+    def validate_title(self, title):
+        product = Product.query.filter_by(title=title.data).first()
+        if product is not None:
+            raise ValidationError('Please use a different title.')
+
+
+
 
 
 # class ShoppingListItemForm(FlaskForm):

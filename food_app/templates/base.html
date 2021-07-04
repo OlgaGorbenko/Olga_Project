@@ -18,10 +18,12 @@
 
 {% block navigation %}
 <div>
-    Shopping List:
+    Shopping:
     <a href="{{ url_for('index') }}">Home</a>
     <a href="{{ url_for('login') }}">Login</a>
     <a href="{{ url_for('logout') }}">Logout</a>
+    <a href="{{ url_for('shopping_list') }}">Shopping List</a>
+    <a href="{{ url_for('product') }}">Product</a>
 </div>
 {% endblock %}
 

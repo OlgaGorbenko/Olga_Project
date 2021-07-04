@@ -2,8 +2,8 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
-from food_app.forms import LoginForm, RegistrationForm, ShoppingListForm
-from food_app.models import User
+from food_app.forms import LoginForm, RegistrationForm, ShoppingListForm, ProductForm
+from food_app.models import User, Product
 from .app_factory import app, db
 
 
@@ -67,8 +67,23 @@ def logout():
 @app.route('/shopping_list', methods=['GET', 'POST'])
 @login_required
 def shopping_list():
-    if request.method == 'GET':
-        return render_template("shopping_list.html", title='Shopping List')
     form = ShoppingListForm()
+    if request.method == 'GET':
+        return render_template("shopping_list.html", title='Shopping List', form=form)
 
 
+
+@app.route('/product', methods=['GET', 'POST'])
+@login_required
+def product():
+    form = ProductForm()
+    if request.method == 'GET':
+        return render_template("product.html", title='Product', form=form)
+    if form.validate_on_submit():
+        product = Product(title=form.title.data, type_of_product=form.type_of_product.data, unit_of_measure=form.unit_of_measure.data)
+        # user.set_password(form.password.data)
+        db.session.add(product)
+        db.session.commit()
+        flash('Congratulations, you are now add product!')
+        return redirect(url_for('product'))
+    return render_template('product.html', title='Product', form=form)
