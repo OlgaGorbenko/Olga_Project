@@ -2,16 +2,14 @@
 
 {% block content %}
     <h1>Hi, {{ current_user.username.title() }}!</h1>
-    <div><p>You can create a shopping list here.</p></div>
-    <div><p>Use favourite recipes to quickly add the ingredients you need!</p></div>
+    <div><p>You can create a <a href="{{ url_for('shopping_list') }}">shopping list</a> here.</p></div>
+    <div><p>Use favourite <a href="{{ url_for('recipe') }}">recipes</a> to quickly add the ingredients you need!</p></div>
 <!--    {% for post in posts %}-->
 <!--    <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>-->
     {% endfor %}
 {% endblock %}
 
-{% block footer %}
-index
-{% endblock %}
+
 
 
 

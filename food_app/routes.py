@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
-from food_app.forms import LoginForm, RegistrationForm, ShoppingListForm, ProductForm, RecipeForm
+from food_app.forms import LoginForm, RegistrationForm, ShoppingListForm, AddProductForm, RecipeForm
 from food_app.models import User, Product, Recipe
 from .app_factory import app, db
 
@@ -26,7 +26,7 @@ def register():
 @app.route('/index')
 @login_required
 def index():
-    # user = {'username': 'Bob'}     # is it necessary?
+    user = {'username': 'Bob'}     # is it necessary?
     posts = [
         {
             'author': {'username': 'John'},
@@ -72,34 +72,32 @@ def shopping_list():
         return render_template("shopping_list.html", title='Shopping List', form=form)
 
 
-
-@app.route('/product', methods=['GET', 'POST'])
+@app.route('/product')
 @login_required
 def product():
-    form = ProductForm()
+    return render_template("product.html", title='Product')
+
+
+@app.route('/all_products', methods=['GET', 'POST'])
+@login_required
+def all_products():
+    products = Product.query.order_by(Product.title).all()    # by ABC order
+    return render_template('all_products.html', title='All Products', products=products)
+
+
+@app.route('/add_product', methods=['GET', 'POST'])
+@login_required
+def add_product():
+    form = AddProductForm()
     if request.method == 'GET':
-        return render_template("product.html", title='Product', form=form)
+        return render_template("add_product.html", title='Add Product', form=form)
     if form.validate_on_submit():
         product = Product(title=form.title.data, type_of_product=form.type_of_product.data, unit_of_measure=form.unit_of_measure.data)
         db.session.add(product)
         db.session.commit()
-        flash('New recipe has been successfully added!!')
+        flash('New product has been successfully added!!')
         return redirect(url_for('product'))
-    return render_template('product.html', title='Product', form=form)
-
-
-# @app.route('/product', methods=['GET', 'POST'])
-# @login_required
-# def show_products():
-#     products = Product.query.all()
-#     return render_template('show_products.html', products= )
-#
-# def return_all_products():
-#     products = Product.query.all()
-#     for product in products:
-#         print(product.id, product.title, product.type_of_product)
-
-
+    return render_template('add_product.html', title='Add Product', form=form)
 
 
 

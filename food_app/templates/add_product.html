@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <title>{% if title %}Recipe{{ title }} | {% endif %}Shopping</title>
+    <title>{% if title %}Add Product{{ title }} | {% endif %}Shopping</title>
     <div><p> </p></div>
     <div><p> </p></div>
 
-<h1>Add Recipe</h1>
+<h1>Add Product</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
@@ -16,14 +16,13 @@
             {% endfor %}
         </p>
         <p>
-            {{ form.ingredients.label }}<br>
-            {{ form.ingredients(size=32) }}<br>
+            {{ form.type_of_product.label }}<br>
+            {{ form.type_of_product }}<br>
         </p>
         <p>
-            {{ form.description.label }}<br>
-            {{ form.description(size=100) }}<br>
-        </p>
+            {{ form.unit_of_measure.label }}<br>
+            {{ form.unit_of_measure }}<br>
+                    </p>
         <p>{{ form.submit() }}</p>
     </form>
 {% endblock %}
-

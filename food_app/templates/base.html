@@ -18,13 +18,13 @@
 
 {% block navigation %}
 <div>
-    Shopping:
-    <a href="{{ url_for('index') }}">Home</a>
-    <a href="{{ url_for('login') }}">Login</a>
+    Shopping:&#160&#160&#160
+    <a href="{{ url_for('index') }}">Home</a>&#160&#160&#160
+    <a href="{{ url_for('shopping_list') }}">Shopping List</a>&#160&#160&#160
+    <a href="{{ url_for('product') }}">Product</a>&#160&#160&#160
+    <a href="{{ url_for('recipe') }}">Recipe</a>&#160&#160&#160
+<!--    <a href="{{ url_for('login') }}">Login</a>&#160&#160&#160-->
     <a href="{{ url_for('logout') }}">Logout</a>
-    <a href="{{ url_for('shopping_list') }}">Shopping List</a>
-    <a href="{{ url_for('product') }}">Product</a>
-    <a href="{{ url_for('recipe') }}">Recipe</a>
 </div>
 {% endblock %}
 
@@ -36,6 +36,16 @@
 <!-- Optional JavaScript -->
 {{ bootstrap.load_js() }}
 {% endblock %}
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.min.css" />
+<script src="https://code.jquery.com/jquery-2.0.3.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+
+
+
+
 </body>
 </html>
 

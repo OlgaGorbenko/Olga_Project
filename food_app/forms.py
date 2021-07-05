@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
+from food_app.constants import units_of_measure
 from food_app.models import User, Product, Recipe
 
 
@@ -36,11 +37,23 @@ class ShoppingListForm(FlaskForm):
     submit = SubmitField('Create')
 
 
-class ProductForm(FlaskForm):
+class AddProductForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
-    type_of_product = StringField('Type of Product')
-    unit_of_measure = StringField('Unit of Measure')
+    type_of_product = SelectField('Type of Product', choices=[
+            ('other', 'other'),
+            ('fruit', 'fruit'),
+            ('vegetable', 'vegetable'),
+            ('meet', 'meet'),
+            ('fish', 'fish'),
+            ('milk', 'milk'),
+            ('grain', 'grain'),
+            ('sweets', 'sweets'),
+            ('spice and souse', 'spice and souse'),
+            ('beverage', 'beverage'),
+        ])
+    unit_of_measure = SelectField('Unit of Measure', choices=units_of_measure)
     submit = SubmitField('   Add   ')
+
 
     def validate_title(self, title):
         product = Product.query.filter_by(title=title.data).first()

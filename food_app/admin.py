@@ -59,6 +59,7 @@ class ProductAdminView(MicroBlogModelView):
     form_choices = {
         'unit_of_measure': units_of_measure,
         'type_of_product': [
+            ('other', 'other'),
             ('fruit', 'fruit'),
             ('vegetable', 'vegetable'),
             ('meet', 'meet'),
@@ -68,7 +69,6 @@ class ProductAdminView(MicroBlogModelView):
             ('sweets', 'sweets'),
             ('spice and souse', 'spice and souse'),
             ('beverage', 'beverage'),
-            ('other', 'other'),
         ],
     }
 
