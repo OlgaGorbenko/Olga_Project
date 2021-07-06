@@ -1,26 +1,39 @@
 {% extends "base.html" %}
 
+{% block navigation %}
+<div>
+    Shopping:&#160&#160&#160
+    <a href="{{ url_for('index') }}">Home</a>&#160&#160&#160
+    <a href="{{ url_for('shopping_list') }}">Shopping List</a>&#160&#160&#160
+    <a href="{{ url_for('product') }}">Product</a>&#160&#160&#160
+    <a href="{{ url_for('recipe') }}">Recipe</a>&#160&#160&#160
+<!--    <a href="{{ url_for('login') }}">Login</a>&#160&#160&#160-->
+<!--    <a href="{{ url_for('logout') }}">Logout</a>-->
+</div>
+{% endblock %}
+
+
 {% block content %}
     <h1>Sign In</h1>
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <p>
-            {{ form.username.label }}<br>
+            <p style="margin-left:1.5em">{{ form.username.label }}<br>
             {{ form.username(size=32) }}<br>
             {% for error in form.username.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
-            {{ form.password.label }}<br>
+            <p style="margin-left:1.5em">{{ form.password.label }}<br>
             {{ form.password(size=32) }}<br>
             {% for error in form.password.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-        <p>{{ form.submit() }}</p>
+        <p><p style="margin-left:1.5em">{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+        <p><p style="margin-left:1.5em">{{ form.submit() }}</p>
     </form>
-    <p>New User? <a href="{{ url_for('register') }}">Click to Register!</a></p>
+    <p><p style="margin-left:1.5em">New User? <a href="{{ url_for('register') }}">Click to Register!</a></p>
 {% endblock %}
 

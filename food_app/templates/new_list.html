@@ -6,23 +6,24 @@
     <div><p> </p></div>
 
 <h1>New Shopping List</h1>
-    <form action="" method="post">
+  <form action="" method="post">
+
         {{ form.hidden_tag() }}
         <p>
-            {{ form.title.label }}<br>
+            <p style="margin-left:1.5em">  {{ form.title.label }}<br>
             {{ form.title(size=32) }}<br>
             {% for error in form.title.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
-            {{ form.items.label }}<br>
+            <p style="margin-left:1.5em">{{ form.items.label }}<br>
             {{ form.items(size=32) }}<br>
         </p>
         <p>
-            {{ form.notes.label }}<br>
+            <p style="margin-left:1.5em">{{ form.notes.label }}<br>
             {{ form.notes(size=100) }}<br>
         </p>
-        <p>{{ form.submit() }}</p>
-    </form>
+        <p><p style="margin-left:1.5em">{{ form.submit() }}</p>
+    </form></p>
 {% endblock %}

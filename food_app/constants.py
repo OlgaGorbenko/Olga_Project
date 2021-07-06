@@ -1,5 +1,5 @@
 units_of_measure = [
-    ('gram', 'g'),
-    ('milliliter', 'mL'),
-    ('piece', 'pc')
+    ('g', 'g'),
+    ('mL', 'mL'),
+    ('pc', 'pc')
 ]

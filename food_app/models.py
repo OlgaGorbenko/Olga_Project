@@ -77,7 +77,7 @@ class Recipe(db.Model):
 
     def __str__(self):
         return f'{self.title} \n {self.description}'   # All first letters are big.
-    # TODO style, \n
+    # TODO style
 
 
 class Ingredient(db.Model):

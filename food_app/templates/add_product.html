@@ -3,26 +3,25 @@
 {% block content %}
     <title>{% if title %}Add Product{{ title }} | {% endif %}Shopping</title>
     <div><p> </p></div>
-    <div><p> </p></div>
 
 <h1>Add Product</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
-            {{ form.title.label }}<br>
+            <p style="margin-left:1.5em">{{ form.title.label }}<br>
             {{ form.title(size=32) }}<br>
             {% for error in form.title.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
-            {{ form.type_of_product.label }}<br>
+            <p style="margin-left:1.5em">{{ form.type_of_product.label }}<br>
             {{ form.type_of_product }}<br>
         </p>
         <p>
-            {{ form.unit_of_measure.label }}<br>
+            <p style="margin-left:1.5em">{{ form.unit_of_measure.label }}<br>
             {{ form.unit_of_measure }}<br>
                     </p>
-        <p>{{ form.submit() }}</p>
+        <p><p style="margin-left:1.5em">{{ form.submit() }}</p>
     </form>
 {% endblock %}

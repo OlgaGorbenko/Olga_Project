@@ -3,11 +3,11 @@
 {% block content %}
 <h1>All Products</h1>
     {% for product in products %}
-    <div><p>{{ product }}</p></div>
+    <div><p><p style="margin-left:1.5em">{{ product }}</p></div>
     {% endfor %}
 
 <form>
-<input type="button" value="   Add Product   " onClick='location.href="add_product"'>
+<p style="margin-left:1.5em"><input type="button" value="   Add Product   " onClick='location.href="add_product"'>
 </form>
 
 {% endblock %}

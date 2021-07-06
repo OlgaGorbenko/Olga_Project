@@ -132,7 +132,7 @@ def shopping_list():
 @login_required
 def all_lists():
     shopping_list = ShoppingList.query.order_by(ShoppingList.title).all()  # by ABC order
-    return render_template('all_lists.html', title='All Recipes', shopping_list=shopping_list)
+    return render_template('all_lists.html', title='All Shopping Lists', shopping_list=shopping_list)
 
 
 @app.route('/new_list', methods=['GET', 'POST'])

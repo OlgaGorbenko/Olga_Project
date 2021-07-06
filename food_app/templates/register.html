@@ -1,37 +1,49 @@
 {% extends "base.html" %}
 
+{% block navigation %}
+<div>
+    Shopping:&#160&#160&#160
+    <a href="{{ url_for('index') }}">Home</a>&#160&#160&#160
+    <a href="{{ url_for('shopping_list') }}">Shopping List</a>&#160&#160&#160
+    <a href="{{ url_for('product') }}">Product</a>&#160&#160&#160
+    <a href="{{ url_for('recipe') }}">Recipe</a>&#160&#160&#160
+    <a href="{{ url_for('login') }}">Login</a>&#160&#160&#160
+<!--    <a href="{{ url_for('logout') }}">Logout</a>-->
+</div>
+{% endblock %}
+
 {% block content %}
     <h1>Register</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
-            {{ form.username.label }}<br>
+            <p style="margin-left:1.5em">{{ form.username.label }}<br>
             {{ form.username(size=32) }}<br>
             {% for error in form.username.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
-            {{ form.email.label }}<br>
+            <p style="margin-left:1.5em">{{ form.email.label }}<br>
             {{ form.email(size=64) }}<br>
             {% for error in form.email.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
-            {{ form.password.label }}<br>
+            <p style="margin-left:1.5em">{{ form.password.label }}<br>
             {{ form.password(size=32) }}<br>
             {% for error in form.password.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
-            {{ form.password2.label }}<br>
+            <p style="margin-left:1.5em">{{ form.password2.label }}<br>
             {{ form.password2(size=32) }}<br>
             {% for error in form.password2.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
-        <p>{{ form.submit() }}</p>
+        <p><p style="margin-left:1.5em">{{ form.submit() }}</p>
     </form>
 {% endblock %}
