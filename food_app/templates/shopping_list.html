@@ -1,8 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <title>{% if title %}Shopping List{{ title }} | {% endif %}Shopping</title>
-    <div><p> </p></div>
-    <div><p> </p></div>
+    <h1> Shopping List </h1>
+&#160
+<form>
+<input type="button" value="   All Shopping Lists    " onClick='location.href="all_lists"'>
+</form>
+&#160
+<form>
+<input type="button" value="   New Shopping List   " onClick='location.href="new_list"'>
+</form>
+
+    <div><p>  </p></div>
 
 {% endblock %}

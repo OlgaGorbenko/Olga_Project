@@ -2,8 +2,8 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
-from food_app.forms import LoginForm, RegistrationForm, ShoppingListForm, AddProductForm, RecipeForm
-from food_app.models import User, Product, Recipe
+from food_app.forms import LoginForm, RegistrationForm, AddProductForm, AddRecipeForm, NewShoppingListForm
+from food_app.models import User, Product, Recipe, ShoppingList
 from .app_factory import app, db
 
 
@@ -26,7 +26,7 @@ def register():
 @app.route('/index')
 @login_required
 def index():
-    user = {'username': 'Bob'}     # is it necessary?
+    user = {'username': 'Bob'}  # is it necessary?
     posts = [
         {
             'author': {'username': 'John'},
@@ -64,14 +64,6 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/shopping_list', methods=['GET', 'POST'])
-@login_required
-def shopping_list():
-    form = ShoppingListForm()
-    if request.method == 'GET':
-        return render_template("shopping_list.html", title='Shopping List', form=form)
-
-
 @app.route('/product')
 @login_required
 def product():
@@ -81,7 +73,7 @@ def product():
 @app.route('/all_products', methods=['GET', 'POST'])
 @login_required
 def all_products():
-    products = Product.query.order_by(Product.title).all()    # by ABC order
+    products = Product.query.order_by(Product.title).all()  # by ABC order
     return render_template('all_products.html', title='All Products', products=products)
 
 
@@ -92,7 +84,8 @@ def add_product():
     if request.method == 'GET':
         return render_template("add_product.html", title='Add Product', form=form)
     if form.validate_on_submit():
-        product = Product(title=form.title.data, type_of_product=form.type_of_product.data, unit_of_measure=form.unit_of_measure.data)
+        product = Product(title=form.title.data, type_of_product=form.type_of_product.data,
+                          unit_of_measure=form.unit_of_measure.data)
         db.session.add(product)
         db.session.commit()
         flash('New product has been successfully added!!')
@@ -100,18 +93,58 @@ def add_product():
     return render_template('add_product.html', title='Add Product', form=form)
 
 
-
-@app.route('/recipe', methods=['GET', 'POST'])
+@app.route('/recipe')
 @login_required
 def recipe():
-    form = RecipeForm()
+    return render_template("recipe.html", title='Recipe')
+
+
+@app.route('/all_recipes', methods=['GET', 'POST'])
+@login_required
+def all_recipes():
+    recipes = Recipe.query.order_by(Recipe.title).all()  # by ABC order
+    return render_template('all_recipes.html', title='All Recipes', recipes=recipes)
+
+
+@app.route('/add_recipe', methods=['GET', 'POST'])
+@login_required
+def add_recipe():
+    form = AddRecipeForm()
     if request.method == 'GET':
-        return render_template("recipe.html", title='Recipe', form=form)
+        return render_template("add_recipe.html", title='Recipe', form=form)
     if form.validate_on_submit():
         recipe = Recipe(title=form.title.data, ingredients=form.ingredients.data, description=form.description.data)
         db.session.add(recipe)
         db.session.commit()
         flash('New recipe has been successfully added!')
         return redirect(url_for('recipe'))
-    return render_template('recipe.html', title='Recipe', form=form)
+    return render_template('add_recipe.html', title='Recipe', form=form)
+
+
+@app.route('/shopping_list', methods=['GET', 'POST'])
+@login_required
+def shopping_list():
+    return render_template("shopping_list.html", title='Shopping List')
+
+
+@app.route('/all_lists', methods=['GET', 'POST'])
+@login_required
+def all_lists():
+    shopping_list = ShoppingList.query.order_by(ShoppingList.title).all()  # by ABC order
+    return render_template('all_lists.html', title='All Recipes', shopping_list=shopping_list)
+
+
+@app.route('/new_list', methods=['GET', 'POST'])
+@login_required
+def new_list():
+    form = NewShoppingListForm()
+    if request.method == 'GET':
+        return render_template("new_list.html", title='Shopping List', form=form)
+    if form.validate_on_submit():
+        shopping_list = ShoppingList(title=form.title.data, ingredients=form.ingredients.data, description=form.description.data)
+        db.session.add(shopping_list)
+        db.session.commit()
+        flash('New shopping list has been successfully created!')
+        return redirect(url_for('shopping_list'))
+    return render_template('new_list.html', title='ShoppingList', form=form)
 

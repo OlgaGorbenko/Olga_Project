@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextF
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
 from food_app.constants import units_of_measure
-from food_app.models import User, Product, Recipe
+from food_app.models import User, Product, Recipe, ShoppingList
 
 
 class LoginForm(FlaskForm):
@@ -61,7 +61,7 @@ class AddProductForm(FlaskForm):
             raise ValidationError('This title already exists.')
 
 
-class RecipeForm(FlaskForm):
+class AddRecipeForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     ingredients = StringField('Ingredients')
     description = TextField('Description')
@@ -73,7 +73,16 @@ class RecipeForm(FlaskForm):
             raise ValidationError('This title already exists.')
 
 
+class NewShoppingListForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    items = StringField('Items')
+    notes = TextField('Notes')
+    submit = SubmitField('   Create   ')
 
+    def validate_title(self, title):
+        shopping_list = ShoppingList.query.filter_by(title=title.data).first()
+        if shopping_list is not None:
+            raise ValidationError('This title already exists.')
 
 
 # class ShoppingListItemForm(FlaskForm):
