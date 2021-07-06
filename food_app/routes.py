@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
 from food_app.forms import LoginForm, RegistrationForm, AddProductForm, AddRecipeForm, NewShoppingListForm
-from food_app.models import User, Product, Recipe, ShoppingList
+from food_app.models import User, Product, Recipe, ShoppingList, Ingredient
 from .app_factory import app, db
 
 
@@ -103,7 +103,8 @@ def recipe():
 @login_required
 def all_recipes():
     recipes = Recipe.query.order_by(Recipe.title).all()  # by ABC order
-    return render_template('all_recipes.html', title='All Recipes', recipes=recipes)
+    ingredients = Ingredient.query.all()
+    return render_template('all_recipes.html', title='All Recipes', recipes=recipes, ingredients=ingredients)
 
 
 @app.route('/add_recipe', methods=['GET', 'POST'])

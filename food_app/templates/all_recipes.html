@@ -6,6 +6,10 @@
     <div><p>{{ recipe }}</p></div>
     {% endfor %}
 
+    {% for ingredient in ingredients %}
+    <div><p>{{ ingredient }}</p></div>
+    {% endfor %}
+
 <form>
 <input type="button" value="   Add Recipe   " onClick='location.href="add_recipe"'>
 </form>

@@ -76,7 +76,8 @@ class Recipe(db.Model):
         return '<Recipe {}>'.format(self.title)
 
     def __str__(self):
-        return f'{self.title}'.title()  # All first letters are big.
+        return f'{self.title} \n {self.description}'   # All first letters are big.
+    # TODO style, \n
 
 
 class Ingredient(db.Model):
@@ -90,6 +91,9 @@ class Ingredient(db.Model):
     def __repr__(self):
         return '<Ingredient {}>'.format(self.product)
 
+    def __str__(self):
+        return f'{self.recipe_id} {self.product} - {self.quantity} {self.unit_of_measure}'
+        # .capitalize() - Big first letter only.
 
 
 
