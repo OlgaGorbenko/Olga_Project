@@ -75,7 +75,7 @@ class AddRecipeForm(FlaskForm):
 
 class NewShoppingListForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
-    items = StringField('Items')
+    # items = StringField('Items')
     notes = TextField('Notes')
     submit = SubmitField('   Create   ')
 

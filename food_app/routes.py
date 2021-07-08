@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, render_template_string
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
@@ -102,9 +102,19 @@ def recipe():
 @app.route('/all_recipes', methods=['GET', 'POST'])
 @login_required
 def all_recipes():
-    recipes = Recipe.query.order_by(Recipe.title).all()  # by ABC order
-    ingredients = Ingredient.query.all()
-    return render_template('all_recipes.html', title='All Recipes', recipes=recipes, ingredients=ingredients)
+    recipes = Recipe.query.all()
+    # shopping_lists = ShoppingList.query.filter(ShoppingList.owner == current_user).all()
+    return render_template(
+        'all_recipes.html',
+        title='All Recipes',
+        recipes=recipes,
+        # shopping_lists=shopping_lists
+    )
+
+@app.route('/add_recipe_to_shopping_list/<recipe_id>', methods=['GET', 'POST'])
+@login_required
+def add_recipe_to_shopping_list(recipe_id):
+    return render_template_string(f'recipe: {recipe_id}')
 
 
 @app.route('/add_recipe', methods=['GET', 'POST'])
@@ -142,7 +152,7 @@ def new_list():
     if request.method == 'GET':
         return render_template("new_list.html", title='Shopping List', form=form)
     if form.validate_on_submit():
-        shopping_list = ShoppingList(title=form.title.data, ingredients=form.ingredients.data, description=form.description.data)
+        shopping_list = ShoppingList(title=form.title.data, description=form.description.data)
         db.session.add(shopping_list)
         db.session.commit()
         flash('New shopping list has been successfully created!')

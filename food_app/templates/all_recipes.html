@@ -4,11 +4,18 @@
 <h1>All Recipes</h1>
     {% for recipe in recipes %}
     <h4><div><p><p style="margin-left:1.5em">{{ recipe }}</p></div></h4>
-    {% endfor %}
+    <a href="{{ url_for('add_recipe_to_shopping_list', recipe_id=recipe.id) }}">
+    <button> Add to Shopping List </button>
+    </a>
+    <div><ul>  {% for ingredient in recipe.ingredients %}
+        <li>{{ ingredient }}</li>
+        {% endfor %}
+    </ul>
+    </div>
 
-    {% for ingredient in ingredients %}
-    <div><p><p style="margin-left:1.5em">{{ ingredient }}</p></div>
-    {% endfor %}
+{% endfor %}
+
+
 
 <form>
 <p style="margin-left:1.5em"><input type="button" value="   Add Recipe   " onClick='location.href="add_recipe"'>

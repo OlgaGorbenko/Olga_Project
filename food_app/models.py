@@ -92,7 +92,7 @@ class Ingredient(db.Model):
         return '<Ingredient {}>'.format(self.product)
 
     def __str__(self):
-        return f'{self.recipe_id} {self.product} - {self.quantity} {self.unit_of_measure}'
+        return f'{self.product} - {self.quantity} {self.unit_of_measure}'
         # .capitalize() - Big first letter only.
 
 
