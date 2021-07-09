@@ -160,8 +160,8 @@ def shopping_list():
 @app.route('/all_lists', methods=['GET', 'POST'])
 @login_required
 def all_lists():
-    shopping_list = ShoppingList.query.order_by(ShoppingList.title).all()  # by ABC order
-    return render_template('all_lists.html', title='All Shopping Lists', shopping_list=shopping_list)
+    shopping_lists = ShoppingList.query.order_by(ShoppingList.title).all()  # by ABC order
+    return render_template('all_lists.html', title='All Shopping Lists', shopping_lists=shopping_lists)
 
 
 @app.route('/new_list', methods=['GET', 'POST'])
@@ -171,7 +171,7 @@ def new_list():
     if request.method == 'GET':
         return render_template("new_list.html", title='Shopping List', form=form)
     if form.validate_on_submit():
-        shopping_list = ShoppingList(title=form.title.data, description=form.description.data)
+        shopping_list = ShoppingList(title=form.title.data, notes=form.notes.data)
         db.session.add(shopping_list)
         db.session.commit()
         flash('New shopping list has been successfully created!')

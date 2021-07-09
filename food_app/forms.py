@@ -1,10 +1,10 @@
-from flask_login._compat import unicode
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextField, SelectField, SelectMultipleField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
 from food_app.constants import units_of_measure
 from food_app.models import User, Product, Recipe, ShoppingList
+from .app_factory import db
 
 
 class LoginForm(FlaskForm):
@@ -33,40 +33,35 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Please use a different email address.')
 
 
-class ShoppingListForm(FlaskForm):
-    title = StringField('Title')
-    submit = SubmitField('   Create   ')
-
-
 class AddPortionsForm(FlaskForm):
-    title = StringField('Shopping List Title')
+    titles = [(r.title, r.title) for r in db.session.query(ShoppingList.title).all()]
+    title = SelectField(label='Shopping List Title', choices=titles)
     number_of_portions = SelectField('Number of Portions', choices=[
-            (1, 1),
-            (2, 2),
-            (3, 3),
-            (4, 4),
-            (5, 5),
-       ])
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5),
+    ])
     submit = SubmitField('   Add Portions   ')
 
 
 class AddProductForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     type_of_product = SelectField('Type of Product', choices=[
-            ('other', 'other'),
-            ('fruit', 'fruit'),
-            ('vegetable', 'vegetable'),
-            ('meet', 'meet'),
-            ('fish', 'fish'),
-            ('milk', 'milk'),
-            ('grain', 'grain'),
-            ('sweets', 'sweets'),
-            ('spice and souse', 'spice and souse'),
-            ('beverage', 'beverage'),
-        ])
+        ('other', 'other'),
+        ('fruit', 'fruit'),
+        ('vegetable', 'vegetable'),
+        ('meet', 'meet'),
+        ('fish', 'fish'),
+        ('milk', 'milk'),
+        ('grain', 'grain'),
+        ('sweets', 'sweets'),
+        ('spice and souse', 'spice and souse'),
+        ('beverage', 'beverage'),
+    ])
     unit_of_measure = SelectField('Unit of Measure', choices=units_of_measure)
     submit = SubmitField('   Add   ')
-
 
     def validate_title(self, title):
         product = Product.query.filter_by(title=title.data).first()
@@ -95,6 +90,5 @@ class NewShoppingListForm(FlaskForm):
         shopping_list = ShoppingList.query.filter_by(title=title.data).first()
         if shopping_list is not None:
             raise ValidationError('This title already exists.')
-
 
 # class ShoppingListItemForm(FlaskForm):

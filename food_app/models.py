@@ -50,6 +50,10 @@ class ShoppingList(db.Model):
     def __repr__(self):
         return '<ShoppingList {}>'.format(self.title)
 
+    def __str__(self):
+        return f'{self.title}'.capitalize()
+        # All first letters are big.
+
 
 class ShoppingListItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
