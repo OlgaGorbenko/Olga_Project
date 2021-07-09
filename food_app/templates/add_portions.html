@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <title>{% if title %}Add Recipe to Shopping List{{ title }} | {% endif %}Shopping</title>
+    <div><p> </p></div>
+    <div><p> </p></div>
+
+<h1>Add Recipe to Shopping List</h1>
+  <form action="" method="post">
+
+        {{ form.hidden_tag() }}
+        <p>
+            <p style="margin-left:1.5em">{{ form.shopping_list_title.label }}<br>
+            {{ form.shopping_list_title(size=32) }}<br>
+        </p>
+        <p>
+            <p style="margin-left:1.5em">{{ form.number_of_portions.label }}<br>
+            {{ form.number_of_portions }}<br>
+        </p>
+        <p><p style="margin-left:1.5em">{{ form.submit() }}</p>
+    </form></p>
+{% endblock %}
