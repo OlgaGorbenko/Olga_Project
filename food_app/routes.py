@@ -118,6 +118,24 @@ def add_recipe_to_shopping_list(recipe_id):
     return render_template_string(f'recipe: {recipe_id}')
 
 
+# @app.route('/add_ingredients_to_shopping_list/<shopping_list_id>)', methods=['GET', 'POST'])
+# @login_required
+# def add_ingredients_to_shopping_list(shopping_list_id):
+#     recipe_id = add_recipe_to_shopping_list
+#     form =
+#     if form.validate_on_submit():
+#         shopping_list_item = ShoppingList.query.filter_by(items=recipe_id.ingredients.data).first()
+#         if shopping_list_item is None:
+#             return
+#
+#         shopping_list_item = Product(title=form.title.data, type_of_product=form.type_of_product.data,
+#                           unit_of_measure=form.unit_of_measure.data)
+#         db.session.add(shopping_list_item)
+#         db.session.commit()
+#         return
+#     return render_template('add_product.html', title='Add Product', form=form)
+
+
 @app.route('/add_recipe', methods=['GET', 'POST'])
 @login_required
 def add_recipe():
@@ -161,10 +179,10 @@ def new_list():
     return render_template('new_list.html', title='ShoppingList', form=form)
 
 
-@app.route('/add_portions', methods=['GET', 'POST'])
+@app.route('/add_recipe_to_shopping_list/1', methods=['GET', 'POST'])
 @login_required
 def add_portions():
     form = AddPortionsForm()
-    return render_template('add_portions.html', title='Add Recipe to Shopping Lists', form=form)
+    return render_template('add_portions.html', title=f'Shopping List Title', form=form)
 
 

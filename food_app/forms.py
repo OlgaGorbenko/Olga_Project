@@ -39,13 +39,13 @@ class ShoppingListForm(FlaskForm):
 
 
 class AddPortionsForm(FlaskForm):
-    shopping_list_title = StringField('Shopping List Title')
+    title = StringField('Shopping List Title')
     number_of_portions = SelectField('Number of Portions', choices=[
-            ('1', '1'),
-            ('2', '2'),
-            ('3', '3'),
-            ('4', '4'),
-            ('5', '5'),
+            (1, 1),
+            (2, 2),
+            (3, 3),
+            (4, 4),
+            (5, 5),
        ])
     submit = SubmitField('   Add Portions   ')
 
