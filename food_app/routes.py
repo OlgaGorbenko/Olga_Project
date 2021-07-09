@@ -2,7 +2,8 @@ from flask import render_template, flash, redirect, url_for, request, render_tem
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
-from food_app.forms import LoginForm, RegistrationForm, AddProductForm, AddRecipeForm, NewShoppingListForm
+from food_app.forms import LoginForm, RegistrationForm, AddProductForm, AddRecipeForm, NewShoppingListForm, \
+    AddPortionsForm
 from food_app.models import User, Product, Recipe, ShoppingList, Ingredient
 from .app_factory import app, db
 
@@ -158,4 +159,12 @@ def new_list():
         flash('New shopping list has been successfully created!')
         return redirect(url_for('shopping_list'))
     return render_template('new_list.html', title='ShoppingList', form=form)
+
+
+@app.route('/add_portions', methods=['GET', 'POST'])
+@login_required
+def add_portions():
+    form = AddPortionsForm()
+    return render_template('add_portions.html', title='Add Recipe to Shopping Lists', form=form)
+
 

@@ -1,5 +1,6 @@
+from flask_login._compat import unicode
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextField, SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextField, SelectField, SelectMultipleField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
 from food_app.constants import units_of_measure
@@ -34,7 +35,19 @@ class RegistrationForm(FlaskForm):
 
 class ShoppingListForm(FlaskForm):
     title = StringField('Title')
-    submit = SubmitField('Create')
+    submit = SubmitField('   Create   ')
+
+
+class AddPortionsForm(FlaskForm):
+    shopping_list_title = StringField('Shopping List Title')
+    number_of_portions = SelectField('Number of Portions', choices=[
+            ('1', '1'),
+            ('2', '2'),
+            ('3', '3'),
+            ('4', '4'),
+            ('5', '5'),
+       ])
+    submit = SubmitField('   Add Portions   ')
 
 
 class AddProductForm(FlaskForm):
@@ -75,7 +88,6 @@ class AddRecipeForm(FlaskForm):
 
 class NewShoppingListForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
-    # items = StringField('Items')
     notes = TextField('Notes')
     submit = SubmitField('   Create   ')
 
