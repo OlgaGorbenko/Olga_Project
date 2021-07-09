@@ -2,9 +2,8 @@ from flask import render_template, flash, redirect, url_for, request, render_tem
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
-from food_app.forms import LoginForm, RegistrationForm, AddProductForm, AddRecipeForm, NewShoppingListForm, \
-    AddPortionsForm
-from food_app.models import User, Product, Recipe, ShoppingList, Ingredient
+from food_app.forms import LoginForm, RegistrationForm, AddProductForm, AddRecipeForm, NewShoppingListForm, AddPortionsForm
+from food_app.models import User, Product, Recipe, ShoppingList
 from .app_factory import app, db
 
 
@@ -184,5 +183,6 @@ def new_list():
 def add_portions():
     form = AddPortionsForm()
     return render_template('add_portions.html', title=f'Shopping List Title', form=form)
+
 
 

@@ -1,4 +1,5 @@
-from flask_wtf import FlaskForm
+from flask_admin.contrib.sqla.fields import QuerySelectField
+from flask_wtf import FlaskForm, form
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
@@ -31,19 +32,6 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('Please use a different email address.')
-
-
-class AddPortionsForm(FlaskForm):
-    titles = [(r.title, r.title) for r in db.session.query(ShoppingList.title).all()]
-    title = SelectField(label='Shopping List Title', choices=titles)
-    number_of_portions = SelectField('Number of Portions', choices=[
-        (1, 1),
-        (2, 2),
-        (3, 3),
-        (4, 4),
-        (5, 5),
-    ])
-    submit = SubmitField('   Add Portions   ')
 
 
 class AddProductForm(FlaskForm):
@@ -90,5 +78,30 @@ class NewShoppingListForm(FlaskForm):
         shopping_list = ShoppingList.query.filter_by(title=title.data).first()
         if shopping_list is not None:
             raise ValidationError('This title already exists.')
+
+
+class AddPortionsForm(FlaskForm):
+    titles = [(r.title, r.title) for r in db.session.query(ShoppingList.title).all()]
+    title = SelectField(label='Shopping List Title', choices=titles)
+    number_of_portions = SelectField('Number of Portions', choices=[
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5),
+    ])
+    submit = SubmitField('   Add Portions   ')
+
+
+
+
+
+
+
+
+
+
+
+
 
 # class ShoppingListItemForm(FlaskForm):
