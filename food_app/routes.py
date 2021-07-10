@@ -111,30 +111,6 @@ def all_recipes():
         # shopping_lists=shopping_lists
     )
 
-# @app.route('/add_recipe_to_shopping_list/<recipe_id>', methods=['GET', 'POST'])
-# @login_required
-# def add_recipe_to_shopping_list(recipe_id):
-#     return render_template_string(f'recipe: {recipe_id}')
-
-
-# @app.route('/add_ingredients_to_shopping_list/<shopping_list_id>)', methods=['GET', 'POST'])
-# @login_required
-# def add_ingredients_to_shopping_list(shopping_list_id):
-#     recipe_id = add_recipe_to_shopping_list
-#     form =
-#     if form.validate_on_submit():
-#         shopping_list_item = ShoppingList.query.filter_by(items=recipe_id.ingredients.data).first()
-#         if shopping_list_item is None:
-#             return
-#
-#         shopping_list_item = Product(title=form.title.data, type_of_product=form.type_of_product.data,
-#                           unit_of_measure=form.unit_of_measure.data)
-#         db.session.add(shopping_list_item)
-#         db.session.commit()
-#         return
-#     return render_template('add_product.html', title='Add Product', form=form)
-
-
 @app.route('/add_recipe', methods=['GET', 'POST'])
 @login_required
 def add_recipe():
@@ -165,10 +141,6 @@ def all_lists():
     # order_by(ShoppingList.owner).all() # by user
 
 
-# def show_user(username):
-#     user = User.query.filter_by(username=username).first_or_404()
-#     return render_template('show_user.html', user=user)
-
 @app.route('/new_list', methods=['GET', 'POST'])
 @login_required
 def new_list():
@@ -187,9 +159,15 @@ def new_list():
 @app.route('/add_recipe_to_shopping_list/<recipe_id>', methods=['GET', 'POST'])
 @login_required
 def add_portions(recipe_id):
-    recipe =
+    current_recipe = Recipe.query.filter_by(id=recipe_id).first()
     form = AddPortionsForm()
-    return render_template('add_portions.html', title=f'Shopping List', form=form)
+    if request.method == 'GET':
+        return render_template("add_portions.html", title='Shopping List', current_recipe=current_recipe, form=form)
+    return render_template('add_portions.html', title=f'Shopping List', current_recipe=current_recipe, form=form)
 
 
 
+
+# def show_user(username):
+#     user = User.query.filter_by(username=username).first_or_404()
+#     return render_template('show_user.html', user=user)

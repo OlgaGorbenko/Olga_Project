@@ -35,3 +35,8 @@ from index.html:
 
            {% for post in posts %}
     <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
+
+====================================
+
+https://stackoverflow.com/questions/17887519/how-to-use-queryselectfield-in-flask
+how to select from base info into forms - QuerySelectField

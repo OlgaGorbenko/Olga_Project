@@ -1,5 +1,6 @@
 from flask_admin.contrib.sqla.fields import QuerySelectField
 from flask_wtf import FlaskForm, form
+from flask_login import current_user
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
@@ -80,9 +81,12 @@ class NewShoppingListForm(FlaskForm):
             raise ValidationError('This title already exists.')
 
 
+def all_lists_titles():
+    owner = current_user.id
+    return ShoppingList.query.filter_by(owner=owner).all()
+
 class AddPortionsForm(FlaskForm):
-    titles = [(r.title, r.title) for r in db.session.query(ShoppingList.title).all()]
-    title = SelectField(label='Shopping List', choices=titles)
+    title_list = QuerySelectField('Shopping Lists', query_factory=all_lists_titles, allow_blank=True)
     number_of_portions = SelectField('Number of Portions', choices=[
         (1, 1),
         (2, 2),
