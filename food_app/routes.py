@@ -111,10 +111,10 @@ def all_recipes():
         # shopping_lists=shopping_lists
     )
 
-@app.route('/add_recipe_to_shopping_list/<recipe_id>', methods=['GET', 'POST'])
-@login_required
-def add_recipe_to_shopping_list(recipe_id):
-    return render_template_string(f'recipe: {recipe_id}')
+# @app.route('/add_recipe_to_shopping_list/<recipe_id>', methods=['GET', 'POST'])
+# @login_required
+# def add_recipe_to_shopping_list(recipe_id):
+#     return render_template_string(f'recipe: {recipe_id}')
 
 
 # @app.route('/add_ingredients_to_shopping_list/<shopping_list_id>)', methods=['GET', 'POST'])
@@ -159,9 +159,15 @@ def shopping_list():
 @app.route('/all_lists', methods=['GET', 'POST'])
 @login_required
 def all_lists():
-    shopping_lists = ShoppingList.query.order_by(ShoppingList.title).all()  # by ABC order
-    return render_template('all_lists.html', title='All Shopping Lists', shopping_lists=shopping_lists)
+    owner = current_user.id
+    shopping_lists = ShoppingList.query.filter_by(owner=owner).all()
+    return render_template('all_lists.html', title='All Shopping Lists', owner=owner, shopping_lists=shopping_lists)
+    # order_by(ShoppingList.owner).all() # by user
 
+
+# def show_user(username):
+#     user = User.query.filter_by(username=username).first_or_404()
+#     return render_template('show_user.html', user=user)
 
 @app.route('/new_list', methods=['GET', 'POST'])
 @login_required
@@ -170,7 +176,7 @@ def new_list():
     if request.method == 'GET':
         return render_template("new_list.html", title='Shopping List', form=form)
     if form.validate_on_submit():
-        shopping_list = ShoppingList(title=form.title.data, notes=form.notes.data)
+        shopping_list = ShoppingList(title=form.title.data, owner=current_user.id, notes=form.notes.data)
         db.session.add(shopping_list)
         db.session.commit()
         flash('New shopping list has been successfully created!')
@@ -178,11 +184,12 @@ def new_list():
     return render_template('new_list.html', title='ShoppingList', form=form)
 
 
-@app.route('/add_recipe_to_shopping_list/1', methods=['GET', 'POST'])
+@app.route('/add_recipe_to_shopping_list/<recipe_id>', methods=['GET', 'POST'])
 @login_required
-def add_portions():
+def add_portions(recipe_id):
+    recipe =
     form = AddPortionsForm()
-    return render_template('add_portions.html', title=f'Shopping List Title', form=form)
+    return render_template('add_portions.html', title=f'Shopping List', form=form)
 
 
 

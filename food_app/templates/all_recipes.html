@@ -11,7 +11,7 @@
         {% endfor %}
     </ul>
     </div>
-    <p style="margin-left:1.5em"><a href="{{ url_for('add_recipe_to_shopping_list', recipe_id=recipe.id) }}">
+    <p style="margin-left:1.5em"><a href="{{ url_for('add_portions', recipe_id=recipe.id) }}">
     <button> Add to Shopping List </button>
     </a>
 {% endfor %}

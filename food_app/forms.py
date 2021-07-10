@@ -82,7 +82,7 @@ class NewShoppingListForm(FlaskForm):
 
 class AddPortionsForm(FlaskForm):
     titles = [(r.title, r.title) for r in db.session.query(ShoppingList.title).all()]
-    title = SelectField(label='Shopping List Title', choices=titles)
+    title = SelectField(label='Shopping List', choices=titles)
     number_of_portions = SelectField('Number of Portions', choices=[
         (1, 1),
         (2, 2),
