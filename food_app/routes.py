@@ -167,16 +167,31 @@ def add_portions(recipe_id):
         # for shopping_list_item in form.title_list.data.items:
         shopping_list_item = ShoppingListItem(
             shopping_list_id=form.title_list.data.id,
-            product_id=Ingredient.query.filter_by(id=recipe_id).first().product_id,
-            product=Ingredient.query.filter_by(id=recipe_id).first().product,
-            quantity=Ingredient.query.filter_by(id=recipe_id).first().quantity * int(form.number_of_portions.data),
-            unit_of_measure=Ingredient.query.filter_by(id=recipe_id).first().unit_of_measure,
-            is_buyed=False
-        )
+            product_id=Ingredient.query.filter_by(recipe_id=recipe_id).first().product_id,
+            product=Ingredient.query.filter_by(recipe_id=recipe_id).first().product,
+            quantity=Ingredient.query.filter_by(recipe_id=recipe_id).first().quantity * int(form.number_of_portions.data),
+            unit_of_measure=Ingredient.query.filter_by(recipe_id=recipe_id).first().unit_of_measure,
+            is_buyed=False)
         db.session.add(shopping_list_item)
         db.session.commit()
         flash('New items have been successfully added!')
-        return redirect(url_for('shopping_list'))
+        items = ShoppingList.query.filter_by(title=form.title_list.data.title).first().items
+        if product in items:
+            return redirect(url_for('shopping_list'))
+        else:
+            shopping_list_item = ShoppingListItem(
+                shopping_list_id=form.title_list.data.id,
+                product_id=Ingredient.query.filter_by(recipe_id=recipe_id).first().product_id,
+                product=Ingredient.query.filter_by(recipe_id=recipe_id).first().product,
+                quantity=Ingredient.query.filter_by(recipe_id=recipe_id).first().quantity * int(
+                    form.number_of_portions.data),
+                unit_of_measure=Ingredient.query.filter_by(recipe_id=recipe_id).first().unit_of_measure,
+                is_buyed=False)
+            db.session.add(shopping_list_item)
+            db.session.commit()
+            return redirect(url_for('shopping_list'))
+
+
     # return render_template('add_portions.html', title=f'Shopping List', current_recipe=current_recipe, form=form)
 
 
