@@ -86,7 +86,7 @@ def all_lists_titles():
     return ShoppingList.query.filter_by(owner=owner).all()
 
 class AddPortionsForm(FlaskForm):
-    title_list = QuerySelectField('Shopping Lists', query_factory=all_lists_titles, allow_blank=True)
+    title_list = QuerySelectField('Shopping Lists', query_factory=all_lists_titles, allow_blank=False)
     number_of_portions = SelectField('Number of Portions', choices=[
         (1, 1),
         (2, 2),
@@ -98,6 +98,15 @@ class AddPortionsForm(FlaskForm):
 
 
 
+def all_products_titles():
+    return Product.query.all()
+
+class AddProductToListForm(FlaskForm):
+    title_list = QuerySelectField('Shopping Lists', query_factory=all_lists_titles, allow_blank=False)
+    product_to_add = QuerySelectField('Product', query_factory=all_products_titles, allow_blank=False)
+    quantity = StringField('Quantity', validators=[DataRequired()])
+    unit_of_measure = SelectField('Unit of Measure', choices=units_of_measure)
+    submit = SubmitField('   Add Product to Shopping List   ')
 
 
 
