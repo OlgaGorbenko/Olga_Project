@@ -1,12 +1,11 @@
 from flask_admin.contrib.sqla.fields import QuerySelectField
-from flask_wtf import FlaskForm, form
 from flask_login import current_user
+from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
 from food_app.constants import units_of_measure
 from food_app.models import User, Product, Recipe, ShoppingList
-from .app_factory import db
 
 
 class LoginForm(FlaskForm):
@@ -85,8 +84,9 @@ def all_lists_titles():
     owner = current_user.id
     return ShoppingList.query.filter_by(owner=owner).all()
 
+
 class AddPortionsForm(FlaskForm):
-    title_list = QuerySelectField('Shopping Lists', query_factory=all_lists_titles, allow_blank=False)
+    title_list = QuerySelectField('Select a Shopping List', query_factory=all_lists_titles, allow_blank=False)
     number_of_portions = SelectField('Number of Portions', choices=[
         (1, 1),
         (2, 2),
@@ -97,24 +97,15 @@ class AddPortionsForm(FlaskForm):
     submit = SubmitField('   Add Portions   ')
 
 
-
 def all_products_titles():
-    return Product.query.all()
+    return Product.query.order_by(Product.title).all()
+
 
 class AddProductToListForm(FlaskForm):
-    title_list = QuerySelectField('Shopping Lists', query_factory=all_lists_titles, allow_blank=False)
+    title_list = QuerySelectField('Select a Shopping List', query_factory=all_lists_titles, allow_blank=False)
     product_to_add = QuerySelectField('Product', query_factory=all_products_titles, allow_blank=False)
-    quantity = StringField('Quantity', validators=[DataRequired()])
+    quantity = StringField('Quantity')
     unit_of_measure = SelectField('Unit of Measure', choices=units_of_measure)
     submit = SubmitField('   Add Product to Shopping List   ')
-
-
-
-
-
-
-
-
-
 
 # class ShoppingListItemForm(FlaskForm):

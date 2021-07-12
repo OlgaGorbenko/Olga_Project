@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div><p> </p></div>
+
+<h1>Add Product to Shopping List</h1>
+
+  <form action="" method="post">
+
+        {{ form.hidden_tag() }}
+        <p>
+            <p style="margin-left:1.5em">{{ form.title_list.label }}<br>
+            {{ form.title_list }}<br>
+        </p>
+        <p>
+            <p style="margin-left:1.5em">{{ form.product_to_add.label }}<br>
+            {{ form.product_to_add }}<br>
+        </p>
+        <p>
+            <p style="margin-left:1.5em">{{ form.quantity.label }}<br>
+            {{ form.quantity }}<br>
+        </p>
+        <p>
+            <p style="margin-left:1.5em">{{ form.unit_of_measure.label }}<br>
+            {{ form.unit_of_measure }}<br>
+        </p>
+        <p><p style="margin-left:1.5em">{{ form.submit() }}</p>
+    </form></p>
+{% endblock %}
+
