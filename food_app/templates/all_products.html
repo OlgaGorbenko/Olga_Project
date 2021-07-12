@@ -3,8 +3,16 @@
 {% block content %}
 <h1>All Products</h1>
     {% for product in products %}
-    <div><p><p style="margin-left:1.5em">{{ product }}</p></div>
-    {% endfor %}
+    <h5><div><p><p style="margin-left:1.5em">{{ product }} </p></div></h5>
+
+<p style="margin-left:1.5em"><a href="{{ url_for('add_product_to_list', id=id) }}">
+    <button> Add to Shopping List </button>
+    </a>
+
+        &#160
+        &#160
+{% endfor %}
+
 
 <form>
 <p style="margin-left:1.5em"><input type="button" value="   Add Product   " onClick='location.href="add_product"'>

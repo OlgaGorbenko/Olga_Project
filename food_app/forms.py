@@ -101,11 +101,16 @@ def all_products_titles():
     return Product.query.order_by(Product.title).all()
 
 
+class SelectProductToAddForm(FlaskForm):
+    select_product_to_add = QuerySelectField('Product', query_factory=all_products_titles, allow_blank=False)
+    submit = SubmitField('  Select Product  ')
+
+
 class AddProductToListForm(FlaskForm):
     title_list = QuerySelectField('Select a Shopping List', query_factory=all_lists_titles, allow_blank=False)
-    product_to_add = QuerySelectField('Product', query_factory=all_products_titles, allow_blank=False)
+    # product_to_add = QuerySelectField('Product', query_factory=all_products_titles, allow_blank=False)
     quantity = StringField('Quantity')
     unit_of_measure = SelectField('Unit of Measure', choices=units_of_measure)
     submit = SubmitField('   Add Product to Shopping List   ')
 
-# class ShoppingListItemForm(FlaskForm):
+

@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
 from food_app.forms import LoginForm, RegistrationForm, AddProductForm, AddRecipeForm, NewShoppingListForm, \
-    AddPortionsForm, AddProductToListForm
+    AddPortionsForm, AddProductToListForm, SelectProductToAddForm
 from food_app.models import User, Product, Recipe, ShoppingList, Ingredient, ShoppingListItem
 from .app_factory import app, db
 
@@ -127,10 +127,8 @@ def add_recipe():
     return render_template('add_recipe.html', title='Recipe', form=form)
 
 
-@app.route('/shopping_list', methods=['GET', 'POST'])
-@login_required
-def shopping_list():
-    return render_template("shopping_list.html", title='Shopping List')
+
+
 
 
 @app.route('/all_lists', methods=['GET', 'POST'])
@@ -157,17 +155,21 @@ def new_list():
     return render_template('new_list.html', title='ShoppingList', form=form)
 
 
-# @app.route('/add_product_to_shopping_list/<product>', methods=['GET', 'POST'])
-# @login_required
-# def add_product_to_list(product):
-
-
-@app.route('/add_product_to_shopping_list', methods=['GET', 'POST'])
+@app.route('/shopping_list', methods=['GET', 'POST'])
 @login_required
-def add_product_to_list():
+def shopping_list():       # former def select_product_to_add()
+    form = SelectProductToAddForm()
+    if request.method == 'GET':
+        return render_template("shopping_list.html", title='Select Product', form=form)
+
+
+@app.route('/add_product_to_shopping_list/<id>', methods=['GET', 'POST'])
+@login_required
+def add_product_to_list(id):
+    current_product = Product.query.filter_by(id=id).first()
     form = AddProductToListForm()
     if request.method == 'GET':
-        return render_template("add_product_to_list.html", title='Shopping List', form=form)
+        return render_template("add_product_to_list.html", title='Shopping List', current_product=current_product, form=form)
     # if form.validate_on_submit():
     #     items = ShoppingList.query.filter_by(title=form.title_list.data.title).items
     #     # current_product = Product.query.filter_by(title=form.product.data.title).first().id

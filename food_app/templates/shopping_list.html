@@ -5,22 +5,31 @@
 &#160
 <form>
     <p style="margin-left:0.7em">
-<input type="button" value="   All Shopping Lists    " onClick='location.href="all_lists"'>
-    </p>
-</form>
-
-<form>
-    <p style="margin-left:0.7em">
 <input type="button" value="   New Shopping List   " onClick='location.href="new_list"'>
     </p>
 </form>
 
 <form>
     <p style="margin-left:0.7em">
-<input type="button" value="  Add Product to Shopping List  " onClick='location.href="add_product_to_shopping_list"'>
+<input type="button" value="   All Shopping Lists    " onClick='location.href="all_lists"'>
     </p>
 </form>
+&#160
+<h3>Select Product for Shopping List</h3>
 
-    <div><p>  </p></div>
+  <form action="" method="post">
 
+        {{ form.hidden_tag() }}
+        <p>
+            <p style="margin-left:1.5em">{{ form.select_product_to_add.label }}<br>
+            {{ form.select_product_to_add }}<br>
+        </p>
+        <p><p style="margin-left:1.5em">{{ form.submit() }}</p>
+    </form></p>
 {% endblock %}
+
+
+
+
+
+
