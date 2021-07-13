@@ -82,7 +82,7 @@ class NewShoppingListForm(FlaskForm):
 
 def all_lists_titles():
     owner = current_user.id
-    return ShoppingList.query.filter_by(owner=owner).all()
+    return ShoppingList.query.filter_by(owner=owner)
 
 
 class AddPortionsForm(FlaskForm):
@@ -110,7 +110,7 @@ class AddProductToListForm(FlaskForm):
     title_list = QuerySelectField('Select a Shopping List', query_factory=all_lists_titles, allow_blank=False)
     # product_to_add = QuerySelectField('Product', query_factory=all_products_titles, allow_blank=False)
     quantity = StringField('Quantity')
-    unit_of_measure = SelectField('Unit of Measure', choices=units_of_measure)
-    submit = SubmitField('   Add Product to Shopping List   ')
+    # unit_of_measure = SelectField('Unit of Measure', choices=units_of_measure)
+    submit = SubmitField('      Add to Shopping List      ')
 
 

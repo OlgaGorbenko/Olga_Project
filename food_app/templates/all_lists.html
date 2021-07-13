@@ -3,11 +3,23 @@
 {% block content %}
 <h1>All Shopping Lists</h1>
     {% for shopping_list in shopping_lists %}
-    <div><p><p style="margin-left:1.5em">{{ shopping_list }}</p></div>
-    {% endfor %}
+<h4><div><p><p style="margin-left:1.5em">{{ shopping_list }}</p></div></h4>
+
+    <div><ul>  {% for item in shopping_list.items %}
+        <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+    </div>
+
+<p style="margin-left:1.5em"><button> Edit Shopping List </button></p>
+
+    </a>
+{% endfor %}
+
+
 
 <form>
-<p style="margin-left:1.5em"><input type="button" value="   New Shopping List   " onClick='location.href="new_list"'>
+<p style="margin-left:1.5em"><input type="button" value="New Shopping List" onClick='location.href="new_list"'>
 </form>
 
 {% endblock %}

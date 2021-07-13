@@ -62,3 +62,25 @@ all products
     {% for product in products %}
     <div><p><p style="margin-left:1.5em">{{ product }}</p></div>
     {% endfor %}
+
+========================================
+text with dropdown button
+
+<div>
+Make your choice :
+
+<div class="btn-group">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+        Button <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="#" id="btn1">Select 1</a></li>
+        <li><a href="#" id="btn2">Select 2</a></li>
+        <li><a href="#" id="btn3">Select 3</a></li>
+    </ul>
+</div>
+======================
+<div class="col-sm-8">
+    <h4 class="d-inline-block">Edit Post</h4>
+    <a href="+++" button type="button" class="btn btn-primary">Add New</a></button>
+</div>        IT WORKS!!!

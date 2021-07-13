@@ -135,7 +135,7 @@ def add_recipe():
 @login_required
 def all_lists():
     owner = current_user.id
-    shopping_lists = ShoppingList.query.filter_by(owner=owner).all()
+    shopping_lists = ShoppingList.query.filter_by(owner=owner)
     return render_template('all_lists.html', title='All Shopping Lists', owner=owner, shopping_lists=shopping_lists)
     # order_by(ShoppingList.owner).all() # by user
 
@@ -163,31 +163,43 @@ def shopping_list():       # former def select_product_to_add()
         return render_template("shopping_list.html", title='Select Product', form=form)
 
 
-@app.route('/add_product_to_shopping_list/<id>', methods=['GET', 'POST'])
+@app.route('/add_product_to_shopping_list/<product_id>', methods=['GET', 'POST'])
 @login_required
-def add_product_to_list(id):
-    current_product = Product.query.filter_by(id=id).first()
+def add_product_to_list(product_id):
+    current_product = Product.query.filter_by(id=product_id).first()
     form = AddProductToListForm()
     if request.method == 'GET':
         return render_template("add_product_to_list.html", title='Shopping List', current_product=current_product, form=form)
-    # if form.validate_on_submit():
-    #     items = ShoppingList.query.filter_by(title=form.title_list.data.title).items
-    #     # current_product = Product.query.filter_by(title=form.product.data.title).first().id
-    #     # product = form.product.data
-    #     if product in items:
-    #         return redirect(url_for('shopping_list'))
-    #     else:
-    #         shopping_list_item = ShoppingListItem(
-    #             shopping_list_id=form.title_list.data.id,
-    #             product_id=Product.query.filter_by(title=product).first().id,
-    #             product=form.product.data,    # Product.query.filter_by(product_id=current_product).first().product,
-    #             quantity=form.quantity.data,
-    #             unit_of_measure=form.unit_of_measure.data,
-    #             is_buyed=False)
-    #     db.session.add(shopping_list_item)
-    #     db.session.commit()
-    #     flash('New items have been successfully added!')
-    #     return redirect(url_for('shopping_list'))
+    if form.validate_on_submit():
+        items = ShoppingListItem.query.filter_by(id=form.title_list.data.id)
+        if current_product in items:
+            form.title_list.data.quantity = form.quantity.data + form.title_list.data.quantity
+            # shopping_list_item = ShoppingListItem(
+            #     shopping_list_id=form.title_list.data.id,
+            #     product_id=current_product.id,
+            #     # product_id=Product.query.filter_by(title=product).first().id,
+            #     product=form.title_list.data.product,
+            #     quantity=form.quantity.data + form.title_list.data.quantity,
+            #     unit_of_measure=form.title_list.data.unit_of_measure,
+            #     is_buyed=False)
+            db.session.add(shopping_list_item)
+            db.session.commit()
+            flash('New quantity have been successfully added!')
+            return redirect(url_for('shopping_list'))
+        else:
+            shopping_list_item = ShoppingListItem(
+                shopping_list_id=form.title_list.data.id,
+                product_id=current_product.id,
+                # product_id=Product.query.filter_by(title=product).first().id,
+                product=current_product,    # Product.query.filter_by(product_id=current_product).first().product,
+                quantity=form.quantity.data,
+                unit_of_measure=current_product.unit_of_measure,
+                is_buyed=False)
+        db.session.add(shopping_list_item)
+        db.session.commit()
+        flash('New item have been successfully added!')
+        return redirect(url_for('shopping_list'))
+
 
 
 

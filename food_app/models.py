@@ -69,6 +69,8 @@ class ShoppingListItem(db.Model):
     def __repr__(self):
         return f'<ShoppingListItem {self.product.title}>'
 
+    def __str__(self):
+        return f'{self.product} - {self.quantity} {self.unit_of_measure}'
 
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
