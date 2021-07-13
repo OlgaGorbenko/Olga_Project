@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request, render_template_string
+from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
@@ -110,6 +110,7 @@ def all_recipes():
         recipes=recipes,
     )
 
+
 @app.route('/add_recipe', methods=['GET', 'POST'])
 @login_required
 def add_recipe():
@@ -123,10 +124,6 @@ def add_recipe():
         flash('New recipe has been successfully added!')
         return redirect(url_for('recipe'))
     return render_template('add_recipe.html', title='Recipe', form=form)
-
-
-
-
 
 
 @app.route('/all_lists', methods=['GET', 'POST'])
@@ -155,7 +152,7 @@ def new_list():
 
 @app.route('/shopping_list', methods=['GET', 'POST'])
 @login_required
-def shopping_list():       # former def select_product_to_add()
+def shopping_list():  # former def select_product_to_add()
     form = SelectProductToAddForm()
     if request.method == 'GET':
         return render_template("shopping_list.html", title='Select Product', form=form)
@@ -166,34 +163,35 @@ def shopping_list():       # former def select_product_to_add()
 def add_product_to_list(product_id):
     current_product = Product.query.filter_by(id=product_id).first()
     form = AddProductToListForm()
-    if request.method == 'GET':
-        return render_template("add_product_to_list.html", title='Shopping List', current_product=current_product, form=form)
-    if form.validate_on_submit():
-        items = ShoppingListItem.query.filter_by(shopping_list_id=form.title_list.data.id)
-        if current_product in items:
-            current_product_in_list = ShoppingListItem.query.filter_by(shopping_list_id=form.title_list.data.id)
-            new_quantity = int(form.quantity.data) + int(current_product_in_list.quantity)
-            current_product_in_list.quantity = ShoppingListItem.query.filter_by(product=current_product_in_list).update({'quantity': new_quantity})
-            db.session.commit()
-            flash('New quantity have been successfully added!')
-            return redirect(url_for('all_lists'))
-        else:
-            shopping_list_item = ShoppingListItem(
-                shopping_list_id=form.title_list.data.id,
-                product_id=current_product.id,
-                # product_id=Product.query.filter_by(title=product).first().id,
-                product=current_product,    # Product.query.filter_by(product_id=current_product).first().product,
-                quantity=form.quantity.data,
-                unit_of_measure=current_product.unit_of_measure,
-                is_buyed=False)
-        db.session.add(shopping_list_item)
-        db.session.commit()
-        flash('New item have been successfully added!')
-        return redirect(url_for('all_lists'))
+
+    if not form.validate_on_submit():
+        return render_template(
+            "add_product_to_list.html", title='Shopping List', current_product=current_product, form=form
+        )
+
+    # Access to selected object. It available at "data" field of related "field of Form"
+    shopping_list: ShoppingList = form.shopping_list.data
+
+    filtered_items = list(filter(lambda item: item.product.id == current_product.id, shopping_list.items))
+    if filtered_items:
+        # Use existed item
+        item = filtered_items[0]
+    else:
+        # Create new ShoppingListItem.
+        #   Then, add it to ShoppingList. Add to field, which related by ForeignKey. We can add item as to list.
+        #   Remember to make save.
+        item = ShoppingListItem(product_id=current_product.id, unit_of_measure=current_product.unit_of_measure,
+                                quantity=0, )
+        shopping_list.items.append(item)
+
+    # Change quantity
+    item.quantity += form.quantity.data
+    # Save
+    db.session.commit()
+
+    flash('Item have been successfully added!')
+
     return redirect(url_for('all_lists'))
-
-
-
 
 
 @app.route('/add_recipe_to_shopping_list/<recipe_id>', methods=['GET', 'POST'])
@@ -204,12 +202,13 @@ def add_portions(recipe_id):
     if request.method == 'GET':
         return render_template("add_portions.html", title='Shopping List', current_recipe=current_recipe, form=form)
     if form.validate_on_submit():
-        # for shopping_list_item in form.title_list.data.items:
+        # for shopping_list_item in form.shopping_list.data.items:
         shopping_list_item = ShoppingListItem(
             shopping_list_id=form.title_list.data.id,
             product_id=Ingredient.query.filter_by(recipe_id=recipe_id).first().product_id,
             product=Ingredient.query.filter_by(recipe_id=recipe_id).first().product,
-            quantity=Ingredient.query.filter_by(recipe_id=recipe_id).first().quantity * int(form.number_of_portions.data),
+            quantity=Ingredient.query.filter_by(recipe_id=recipe_id).first().quantity * int(
+                form.number_of_portions.data),
             unit_of_measure=Ingredient.query.filter_by(recipe_id=recipe_id).first().unit_of_measure,
             is_buyed=False)
         db.session.add(shopping_list_item)
@@ -231,18 +230,9 @@ def add_portions(recipe_id):
             db.session.commit()
             return redirect(url_for('shopping_list'))
 
-
     # return render_template('add_portions.html', title=f'Shopping List', current_recipe=current_recipe, form=form)
 
-
 # owner = current_user.id
-
-
-
-
-
-
-
 
 
 # def show_user(username):

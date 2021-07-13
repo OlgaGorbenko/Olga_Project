@@ -2,6 +2,7 @@ from flask_admin.contrib.sqla.fields import QuerySelectField
 from flask_login import current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextField, SelectField
+from wtforms.fields.html5 import IntegerField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
 from food_app.constants import units_of_measure
@@ -107,10 +108,8 @@ class SelectProductToAddForm(FlaskForm):
 
 
 class AddProductToListForm(FlaskForm):
-    title_list = QuerySelectField('Select a Shopping List', query_factory=all_lists_titles, allow_blank=False)
+    shopping_list = QuerySelectField('Select a Shopping List', query_factory=all_lists_titles, allow_blank=False)
     # product_to_add = QuerySelectField('Product', query_factory=all_products_titles, allow_blank=False)
-    quantity = StringField('Quantity')
+    quantity = IntegerField('Quantity', default=1)
     # unit_of_measure = SelectField('Unit of Measure', choices=units_of_measure)
     submit = SubmitField('      Add to Shopping List      ')
-
-
