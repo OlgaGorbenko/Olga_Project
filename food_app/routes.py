@@ -173,32 +173,26 @@ def add_product_to_list(product_id):
     if form.validate_on_submit():
         items = ShoppingListItem.query.filter_by(id=form.title_list.data.id)
         if current_product in items:
-            form.title_list.data.quantity = form.quantity.data + form.title_list.data.quantity
-            # shopping_list_item = ShoppingListItem(
-            #     shopping_list_id=form.title_list.data.id,
-            #     product_id=current_product.id,
-            #     # product_id=Product.query.filter_by(title=product).first().id,
-            #     product=form.title_list.data.product,
-            #     quantity=form.quantity.data + form.title_list.data.quantity,
-            #     unit_of_measure=form.title_list.data.unit_of_measure,
-            #     is_buyed=False)
-            db.session.add(shopping_list_item)
-            db.session.commit()
+            new_quantity = form.quantity.data + form.title_list.data.quantity
+            quantity = ShoppingListItem.query.filter_by(product=current_product).edit({'quantity': new_quantity})
+# find out
+            db.session.commit(quantity)
             flash('New quantity have been successfully added!')
             return redirect(url_for('shopping_list'))
-        else:
-            shopping_list_item = ShoppingListItem(
-                shopping_list_id=form.title_list.data.id,
-                product_id=current_product.id,
-                # product_id=Product.query.filter_by(title=product).first().id,
-                product=current_product,    # Product.query.filter_by(product_id=current_product).first().product,
-                quantity=form.quantity.data,
-                unit_of_measure=current_product.unit_of_measure,
-                is_buyed=False)
-        db.session.add(shopping_list_item)
-        db.session.commit()
-        flash('New item have been successfully added!')
         return redirect(url_for('shopping_list'))
+        # else:
+        #     shopping_list_item = ShoppingListItem(
+        #         shopping_list_id=form.title_list.data.id,
+        #         product_id=current_product.id,
+        #         # product_id=Product.query.filter_by(title=product).first().id,
+        #         product=current_product,    # Product.query.filter_by(product_id=current_product).first().product,
+        #         quantity=form.quantity.data,
+        #         unit_of_measure=current_product.unit_of_measure,
+        #         is_buyed=False)
+        # db.session.add(shopping_list_item)
+        # db.session.commit()
+        # flash('New item have been successfully added!')
+        # return redirect(url_for('shopping_list'))
 
 
 
