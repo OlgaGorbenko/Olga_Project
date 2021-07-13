@@ -84,3 +84,18 @@ Make your choice :
     <h4 class="d-inline-block">Edit Post</h4>
     <a href="+++" button type="button" class="btn btn-primary">Add New</a></button>
 </div>        IT WORKS!!!
+
+=======================
+form for select product:
+
+<h3>Select Product for Shopping List</h3>
+
+  <form action="" method="post">
+
+        {{ form.hidden_tag() }}
+        <p>
+            <p style="margin-left:1.5em">{{ form.select_product_to_add.label }}<br>
+            {{ form.select_product_to_add }}<br>
+        </p>
+        <p><p style="margin-left:1.5em">{{ form.submit() }}</p>
+    </form></p>

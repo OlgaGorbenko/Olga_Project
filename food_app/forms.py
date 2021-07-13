@@ -98,7 +98,7 @@ class AddPortionsForm(FlaskForm):
 
 
 def all_products_titles():
-    return Product.query.order_by(Product.title).all()
+    return Product.query.order_by(Product.title)
 
 
 class SelectProductToAddForm(FlaskForm):

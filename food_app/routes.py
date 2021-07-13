@@ -74,7 +74,7 @@ def product():
 @app.route('/all_products', methods=['GET', 'POST'])
 @login_required
 def all_products():
-    products = Product.query.order_by(Product.title).all()  # by ABC order
+    products = Product.query.order_by(Product.title)  # by ABC order
     return render_template('all_products.html', title='All Products', products=products)
 
 
@@ -104,12 +104,10 @@ def recipe():
 @login_required
 def all_recipes():
     recipes = Recipe.query.all()
-    # shopping_lists = ShoppingList.query.filter(ShoppingList.owner == current_user).all()
     return render_template(
         'all_recipes.html',
         title='All Recipes',
         recipes=recipes,
-        # shopping_lists=shopping_lists
     )
 
 @app.route('/add_recipe', methods=['GET', 'POST'])
@@ -137,7 +135,7 @@ def all_lists():
     owner = current_user.id
     shopping_lists = ShoppingList.query.filter_by(owner=owner)
     return render_template('all_lists.html', title='All Shopping Lists', owner=owner, shopping_lists=shopping_lists)
-    # order_by(ShoppingList.owner).all() # by user
+    # order_by(ShoppingList.owner) # by user
 
 
 @app.route('/new_list', methods=['GET', 'POST'])
@@ -171,29 +169,28 @@ def add_product_to_list(product_id):
     if request.method == 'GET':
         return render_template("add_product_to_list.html", title='Shopping List', current_product=current_product, form=form)
     if form.validate_on_submit():
-        items = ShoppingListItem.query.filter_by(id=form.title_list.data.id)
+        items = ShoppingListItem.query.filter_by(shopping_list_id=form.title_list.data.id)
         if current_product in items:
-            new_quantity = form.quantity.data + form.title_list.data.quantity
-            quantity = ShoppingListItem.query.filter_by(product=current_product).edit({'quantity': new_quantity})
-# find out
-            db.session.commit(quantity)
+            current_product_in_list = ShoppingListItem.query.filter_by(shopping_list_id=form.title_list.data.id)
+            new_quantity = int(form.quantity.data) + int(current_product_in_list.quantity)
+            current_product_in_list.quantity = ShoppingListItem.query.filter_by(product=current_product_in_list).update({'quantity': new_quantity})
+            db.session.commit()
             flash('New quantity have been successfully added!')
-            return redirect(url_for('shopping_list'))
-        return redirect(url_for('shopping_list'))
-        # else:
-        #     shopping_list_item = ShoppingListItem(
-        #         shopping_list_id=form.title_list.data.id,
-        #         product_id=current_product.id,
-        #         # product_id=Product.query.filter_by(title=product).first().id,
-        #         product=current_product,    # Product.query.filter_by(product_id=current_product).first().product,
-        #         quantity=form.quantity.data,
-        #         unit_of_measure=current_product.unit_of_measure,
-        #         is_buyed=False)
-        # db.session.add(shopping_list_item)
-        # db.session.commit()
-        # flash('New item have been successfully added!')
-        # return redirect(url_for('shopping_list'))
-
+            return redirect(url_for('all_lists'))
+        else:
+            shopping_list_item = ShoppingListItem(
+                shopping_list_id=form.title_list.data.id,
+                product_id=current_product.id,
+                # product_id=Product.query.filter_by(title=product).first().id,
+                product=current_product,    # Product.query.filter_by(product_id=current_product).first().product,
+                quantity=form.quantity.data,
+                unit_of_measure=current_product.unit_of_measure,
+                is_buyed=False)
+        db.session.add(shopping_list_item)
+        db.session.commit()
+        flash('New item have been successfully added!')
+        return redirect(url_for('all_lists'))
+    return redirect(url_for('all_lists'))
 
 
 
