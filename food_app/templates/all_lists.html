@@ -2,6 +2,7 @@
 
 {% block content %}
 <h1>All Shopping Lists</h1>
+
     {% for shopping_list in shopping_lists %}
 <h4><div><p><p style="margin-left:1.5em">{{ shopping_list }}</p></div></h4>
 
@@ -11,15 +12,24 @@
     </ul>
     </div>
 
-<p style="margin-left:1.5em"><button> Edit Shopping List </button></p>
+<head>
+  <style>
+   form {
+    display: inline-block;
+}
+   </style>
+</head>
 
-    </a>
+
+<form action="   ">
+    <p style="margin-left:1.5em"><input class="button" type="submit" value="Edit"></p>
+</form>
+<form action="{{ url_for('delete_shopping_list', shopping_list_id=shopping_list.id) }}">
+    <input class="button" type="submit" value="Delete">
+</form>
+
 {% endfor %}
 
 
-
-<form>
-<p style="margin-left:1.5em"><input type="button" value="New Shopping List" onClick='location.href="new_list"'>
-</form>
 
 {% endblock %}

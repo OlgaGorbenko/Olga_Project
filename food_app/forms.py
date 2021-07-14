@@ -85,6 +85,14 @@ def all_lists_titles():
     return ShoppingList.query.filter_by(owner=owner)
 
 
+class AskDeleteShoppingListForm(FlaskForm):
+    ask = SelectField('Delete?', choices=[
+        ('yes', 'yes'),
+        ('no', 'no'),
+    ])
+    submit = SubmitField('   Submit   ')
+
+
 class AddPortionsForm(FlaskForm):
     title_list = QuerySelectField('Select a Shopping List', query_factory=all_lists_titles, allow_blank=False)
     number_of_portions = SelectField('Number of Portions', choices=[

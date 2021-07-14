@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
 from food_app.forms import LoginForm, RegistrationForm, AddProductForm, AddRecipeForm, NewShoppingListForm, \
-    AddPortionsForm, AddProductToListForm, SelectProductToAddForm
+    AddPortionsForm, AddProductToListForm, SelectProductToAddForm, AskDeleteShoppingListForm
 from food_app.models import User, Product, Recipe, ShoppingList, Ingredient, ShoppingListItem
 from .app_factory import app, db
 
@@ -125,10 +125,6 @@ def add_recipe():
     return render_template('add_recipe.html', title='Recipe', form=form)
 
 
-
-
-
-
 @app.route('/all_lists', methods=['GET', 'POST'])
 @login_required
 def all_lists():
@@ -136,6 +132,26 @@ def all_lists():
     shopping_lists = ShoppingList.query.filter_by(owner=owner)
     return render_template('all_lists.html', title='All Shopping Lists', owner=owner, shopping_lists=shopping_lists)
     # order_by(ShoppingList.owner) # by user
+
+
+@app.route('/delete_shopping_list/<shopping_list_id>', methods=['GET', 'POST'])
+@login_required
+def delete_shopping_list(shopping_list_id):
+    owner = current_user.id
+    shopping_lists = ShoppingList.query.filter_by(owner=owner)
+    current_shopping_list = ShoppingList.query.filter_by(id=shopping_list_id).first()
+    current_shopping_list_items = current_shopping_list.items
+    form = AskDeleteShoppingListForm()
+    if request.method == 'GET':
+        return render_template("delete_shopping_list.html", title='Do you want to delete?', form=form)
+    if form.validate_on_submit():
+        if form.ask.data == 'yes':
+            db.session.delete(current_shopping_list)
+            db.session.delete(current_shopping_list_items)
+            db.session.commit()
+            return render_template('all_lists.html', title='All Shopping Lists', owner=owner, shopping_lists=shopping_lists)
+        else:
+            return render_template('all_lists.html', title='All Shopping Lists', owner=owner, shopping_lists=shopping_lists)
 
 
 @app.route('/new_list', methods=['GET', 'POST'])
@@ -153,12 +169,12 @@ def new_list():
     return render_template('new_list.html', title='ShoppingList', form=form)
 
 
-@app.route('/shopping_list', methods=['GET', 'POST'])
-@login_required
-def shopping_list():       # former def select_product_to_add()
-    form = SelectProductToAddForm()
-    if request.method == 'GET':
-        return render_template("shopping_list.html", title='Select Product', form=form)
+# @app.route('/shopping_list', methods=['GET', 'POST'])
+# @login_required
+# def shopping_list():       # former def select_product_to_add()
+#     form = SelectProductToAddForm()
+#     if request.method == 'GET':
+#         return render_template("shopping_list.html", title='Select Product', form=form)
 
 
 @app.route('/add_product_to_shopping_list/<product_id>', methods=['GET', 'POST'])
@@ -191,9 +207,6 @@ def add_product_to_list(product_id):
         flash('New item have been successfully added!')
         return redirect(url_for('all_lists'))
     return redirect(url_for('all_lists'))
-
-
-
 
 
 @app.route('/add_recipe_to_shopping_list/<recipe_id>', methods=['GET', 'POST'])
