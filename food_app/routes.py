@@ -244,7 +244,7 @@ def add_portions(recipe_id):
             is_buyed=False)
         shopping_list.items.append(item)
         # item.quantity += form.quantity.data
-        db.session.add(shopping_list_item)
+        db.session.add(item)
         db.session.commit()
         flash('New items have been successfully added!')
         return redirect(url_for('shopping_list'))
