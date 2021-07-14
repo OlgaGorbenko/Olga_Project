@@ -99,3 +99,34 @@ form for select product:
         </p>
         <p><p style="margin-left:1.5em">{{ form.submit() }}</p>
     </form></p>
+=================================================
+ 	Rinse the rice. Cut the meat, carrots and onions into 0,5-1 cm cubes. Put all the ingredients into the bowl, add vegetable olive oil, salt and spices and properly stir. Put the rice into the bowl. Add water and garlic on the top. Close the lid of multicooker. Set the program PILAF, set the time for 45 minutes. Cook until the program ends.
+Pilaf
+
+    Rice - 200 g
+    Chicken - 250 g
+    Onion - 80 g
+    Carrot - 150 g
+    Garlic - 20 g
+    Vegetable oil - 50 mL
+    Water - 260 mL
+    Salt - 15 g
+
+
+ 	Place 1 cup uncooked rice in a bowl. Add 2 cups warm water. Add salt. Let it soak for about 30 minutes in the bowl before straining out the rice.
+Rice
+
+    Rice - 250 g
+    Water - 500 mL
+    Salt - 5 g
+
+
+ 	Crack four eggs into a bowl, add 30ml (2 tbsp) of milk and a pinch of salt and black pepper. Beat the mixture lightly with a whisk or fork. Melt 1 tbsp of butter in a medium size fry pan on a low heat and when it starts foaming, pour in the eggs and leave to set for 60-90 seconds. Using a spatula, gently pull the eggs from the edges of the pan into the center. Turn and tilt the pan so the runny eggs take up the available space and again gently pull it towards the center. Remove the pan from the heat before the egg is completely set. Leave to sit for a minute or two so the egg can gently finish cooking in its own heat.
+Scrambled Eggs
+
+
+    Egg - 4 pc
+    Butter - 15 g
+    Milk - 30 mL
+    Salt - 5 g
+

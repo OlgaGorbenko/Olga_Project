@@ -45,7 +45,7 @@ class ShoppingList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(256), default='')
     owner = db.Column(db.ForeignKey('user.id'))
-    items = db.relationship('ShoppingListItem', backref='shopping_list', lazy='dynamic')
+    items = db.relationship('ShoppingListItem', backref='shopping_list', lazy='dynamic', cascade='all, delete-orphan', passive_deletes = True)
     notes = db.Column(db.Text)
 
     def __repr__(self):
@@ -58,7 +58,7 @@ class ShoppingList(db.Model):
 
 class ShoppingListItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    shopping_list_id = db.Column(db.ForeignKey('shopping_list.id'))
+    shopping_list_id = db.Column(db.ForeignKey('shopping_list.id', ondelete='CASCADE', name='_fk_shopping_list_id'))
     product_id = db.Column(db.ForeignKey('product.id'))
     product = db.relationship('Product')
     # ingredient_id = db.Column(db.ForeignKey('ingredient.id'))
@@ -68,7 +68,7 @@ class ShoppingListItem(db.Model):
     is_buyed = db.Column(db.Boolean, default=False)
 
     __table_args__ = (
-        UniqueConstraint('shopping_list_id', 'product_id'),
+        UniqueConstraint('shopping_list_id', 'product_id', name='_uc_shopping_list_id_product_id'),
     )
 
     def __repr__(self):
