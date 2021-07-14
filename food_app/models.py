@@ -84,6 +84,9 @@ class Recipe(db.Model):
     ingredients = db.relationship('Ingredient', backref='recipe', lazy='dynamic')
     description = db.Column(db.Text)
 
+    def return_ingredients(self, recipe):
+        return list(Ingredient.query.filter_by(recipe_id=recipe.id))
+
     def __repr__(self):
         return '<Recipe {}>'.format(self.title)
 
