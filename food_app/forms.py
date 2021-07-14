@@ -41,7 +41,7 @@ class AddProductForm(FlaskForm):
         ('other', 'other'),
         ('fruit', 'fruit'),
         ('vegetable', 'vegetable'),
-        ('meet', 'meet'),
+        ('meat', 'meat'),
         ('fish', 'fish'),
         ('milk', 'milk'),
         ('grain', 'grain'),
