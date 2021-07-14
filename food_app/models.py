@@ -45,7 +45,7 @@ class ShoppingList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(256), default='')
     owner = db.Column(db.ForeignKey('user.id'))
-    items = db.relationship('ShoppingListItem', backref='shopping_list', lazy='dynamic', cascade='all, delete-orphan', passive_deletes = True)
+    items = db.relationship('ShoppingListItem', backref='shopping_list', lazy='dynamic', cascade='all, delete-orphan', passive_deletes=True)
     notes = db.Column(db.Text)
 
     def __repr__(self):
