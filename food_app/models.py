@@ -1,4 +1,5 @@
 from flask_login import UserMixin
+from sqlalchemy import UniqueConstraint
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from .app_factory import db, login
@@ -62,15 +63,20 @@ class ShoppingListItem(db.Model):
     product = db.relationship('Product')
     # ingredient_id = db.Column(db.ForeignKey('ingredient.id'))
     # ingredient = db.relationship('Ingredient')
-    quantity = db.Column(db.Integer)
+    quantity = db.Column(db.Integer, default=0)
     unit_of_measure = db.Column(db.String(120))
-    is_buyed = db.Column(db.Boolean)
+    is_buyed = db.Column(db.Boolean, default=False)
+
+    __table_args__ = (
+        UniqueConstraint('shopping_list_id', 'product_id'),
+    )
 
     def __repr__(self):
         return f'<ShoppingListItem {self.product.title}>'
 
     def __str__(self):
         return f'{self.product} - {self.quantity} {self.unit_of_measure}'
+
 
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -100,10 +106,6 @@ class Ingredient(db.Model):
     def __str__(self):
         return f'{self.product} - {self.quantity} {self.unit_of_measure}'
         # .capitalize() - Big first letter only.
-
-
-
-
 
 # class Post(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
