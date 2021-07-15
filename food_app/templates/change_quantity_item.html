@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Do you want to change quantity? </h1>
+
+
+<h4><div><p><p style="margin-left:1.5em"><font color="#1e90ff">{{ item }}</font></p></div></h4>
+
+
+  <form action="" method="post">
+
+{{ form.hidden_tag() }}
+        <p>
+            <p style="margin-left:1.5em">{{ form.quantity.label }} ({{ item.unit_of_measure }})<br>
+
+            {{ form.quantity }}<br>
+        </p>
+        <p><p style="margin-left:1.5em">{{ form.submit() }}</p>
+    </form></p>
+{% endblock %
+
+

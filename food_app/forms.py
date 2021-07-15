@@ -6,7 +6,7 @@ from wtforms.fields.html5 import IntegerField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
 from food_app.constants import units_of_measure
-from food_app.models import User, Product, Recipe, ShoppingList
+from food_app.models import User, Product, Recipe, ShoppingList, ShoppingListItem
 
 
 class LoginForm(FlaskForm):
@@ -123,3 +123,10 @@ class AddProductToListForm(FlaskForm):
     quantity = IntegerField('Quantity', default=1)
     # unit_of_measure = SelectField('Unit of Measure', choices=units_of_measure)
     submit = SubmitField('      Add to Shopping List      ')
+
+
+class ChangeQuantityItemForm(FlaskForm):
+    # item = ShoppingListItem.query.filter_by(id=item_id).first()
+    quantity = IntegerField('Quantity', default=0)
+    submit = SubmitField('Submit')
+

@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
 from food_app.forms import LoginForm, RegistrationForm, AddProductForm, AddRecipeForm, NewShoppingListForm, \
-    AddPortionsForm, AddProductToListForm, SelectProductToAddForm, AskDeleteShoppingListForm
+    AddPortionsForm, AddProductToListForm, SelectProductToAddForm, AskDeleteShoppingListForm, ChangeQuantityItemForm
 from food_app.models import User, Product, Recipe, ShoppingList, Ingredient, ShoppingListItem
 from .app_factory import app, db
 
@@ -161,10 +161,14 @@ def edit_shopping_list(shopping_list_id):
 @login_required
 def change_quantity_item(item_id):
     item = ShoppingListItem.query.filter_by(id=item_id).first()
-    # form = AskDeleteShoppingListForm()
+    form = ChangeQuantityItemForm()
     if request.method == 'GET':
-        return render_template("change_quantity_item.html", title='Do you want to delete?', item=item)
-# quantity=quantity, form=form
+        return render_template("change_quantity_item.html", title='Do you want to change quantity?', item=item, quantity=quantity, form=form)
+    if form.validate_on_submit():
+        quantity = form.quantity.data
+        db.session.delete(quantity)
+        db.session.commit()
+        return render_template('edit_shopping_list.html', shopping_list=shopping_list)
 
 
 @app.route('/edit_shopping_list/shopping_list_id/<item_id>', methods=['GET', 'POST'])
