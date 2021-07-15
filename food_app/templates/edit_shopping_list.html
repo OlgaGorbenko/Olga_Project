@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Edit Shopping List</h1>
+
+
+<h4><div><p><p style="margin-left:1.5em">{{ shopping_list }}</p></div></h4>
+
+    <div><ul>  {% for item in shopping_list.items %}
+        <li>{{ item }}</li>
+
+
+      <head>
+  <style>
+   form {
+    display: inline-block;
+}
+   </style>
+</head>
+
+
+      <form action="   ">
+    <input class="button" type="submit" value="Change quantity">
+</form>
+<form action="{{ url_for('delete_shopping_list', shopping_list_id=shopping_list.id) }}">
+    <input class="button" type="submit" value="Delete">
+</form>
+
+        {% endfor %}
+    </ul>
+    </div>
+
+<form>
+    <p style="margin-left:0.7em">
+<input type="button" value="Add Product to Shopping List" onClick='location.href="http://127.0.0.1:5000/all_products"'>
+    </p>
+</form>
+
+{% endblock %}
