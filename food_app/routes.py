@@ -150,6 +150,13 @@ def new_list():
     return render_template('new_list.html', title='ShoppingList', form=form)
 
 
+@app.route('/edit_shopping_list/<shopping_list_id>', methods=['GET', 'POST'])
+@login_required
+def edit_shopping_list(shopping_list_id):
+    shopping_list = ShoppingList.query.filter_by(id=shopping_list_id).first()
+    return render_template('edit_shopping_list.html', shopping_list=shopping_list)
+
+
 @app.route('/delete_shopping_list/<shopping_list_id>', methods=['GET', 'POST'])
 @login_required
 def delete_shopping_list(shopping_list_id):
@@ -226,10 +233,13 @@ def add_portions(recipe_id):
         return render_template(
             "add_portions.html", title='Shopping List', current_recipe=current_recipe, form=form
         )
+    for ingredient in current_recipe.ingredients:
+        one_product = ingredient.product
 
-    shopping_list: ShoppingList = form.shopping_list.data
+    shopping_list: ShoppingList = form.title_list.data
 
-    filtered_items = list(filter(lambda item: item.product.id == current_recipe.product, shopping_list.items))
+    filtered_items = list(filter(lambda item: item.product.id == one_product.id, shopping_list.items))
+
     if filtered_items:
         # Use existed item
         item = filtered_items[0]
@@ -243,7 +253,7 @@ def add_portions(recipe_id):
             unit_of_measure=Ingredient.query.filter_by(recipe_id=recipe_id).first().unit_of_measure,
             is_buyed=False)
         shopping_list.items.append(item)
-        # item.quantity += form.quantity.data
+        item.quantity += ingredient.quantity
         db.session.add(item)
         db.session.commit()
         flash('New items have been successfully added!')
