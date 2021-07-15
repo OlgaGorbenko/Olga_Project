@@ -19,7 +19,7 @@
 </head>
 
 
-      <form action="   ">
+      <form action="{{ url_for('edit_shopping_list', shopping_list_id=shopping_list.id, item_id=item.id) }}">
     <input class="button" type="submit" value="Change quantity">
 </form>
 <form action="{{ url_for('edit_shopping_list', shopping_list_id=shopping_list.id, item_id=item.id) }}">

@@ -157,7 +157,17 @@ def edit_shopping_list(shopping_list_id):
     return render_template('edit_shopping_list.html', shopping_list=shopping_list)
 
 
-@app.route('/edit_shopping_list/<shopping_list_id>/<item_id>', methods=['GET', 'POST'])
+@app.route('/edit_shopping_list/shopping_list_id/<item_id>', methods=['GET', 'POST'])
+@login_required
+def change_quantity_item(item_id):
+    item = ShoppingListItem.query.filter_by(id=item_id).first()
+    # form = AskDeleteShoppingListForm()
+    if request.method == 'GET':
+        return render_template("change_quantity_item.html", title='Do you want to delete?', item=item)
+# quantity=quantity, form=form
+
+
+@app.route('/edit_shopping_list/shopping_list_id/<item_id>', methods=['GET', 'POST'])
 @login_required
 def delete_shopping_list_item(item_id):
     item = ShoppingListItem.query.filter_by(id=item_id).first()
@@ -183,7 +193,8 @@ def delete_shopping_list(shopping_list_id):
     owner = current_user.id
     shopping_lists = ShoppingList.query.filter_by(owner=owner)
     if request.method == 'GET':
-        return render_template("delete_shopping_list.html", title='Do you want to delete?', shopping_list=shopping_list, form=form)
+        return render_template("delete_shopping_list.html", title='Do you want to delete?', shopping_list=shopping_list,
+                               form=form)
     if form.validate_on_submit():
         if form.ask.data == 'yes':
             # db.session.delete(shopping_list_item)
@@ -239,7 +250,6 @@ def add_product_to_list(product_id):
     return redirect(url_for('all_lists'))
 
 
-
 @app.route('/add_recipe_to_shopping_list/<recipe_id>', methods=['GET', 'POST'])
 @login_required
 def add_portions(recipe_id):
@@ -277,10 +287,6 @@ def add_portions(recipe_id):
         flash('New items have been successfully added!')
         return redirect(url_for('shopping_list'))
 
-
-
-
-
 # @app.route('/add_recipe_to_shopping_list/<recipe_id>', methods=['GET', 'POST'])
 # @login_required
 # def add_portions(recipe_id):
@@ -317,7 +323,7 @@ def add_portions(recipe_id):
 #             db.session.commit()
 #             return redirect(url_for('shopping_list'))
 
-    # return render_template('add_portions.html', title=f'Shopping List', current_recipe=current_recipe, form=form)
+# return render_template('add_portions.html', title=f'Shopping List', current_recipe=current_recipe, form=form)
 
 # owner = current_user.id
 
