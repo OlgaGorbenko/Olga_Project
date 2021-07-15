@@ -160,21 +160,22 @@ def edit_shopping_list(shopping_list_id):
 @app.route('/delete_shopping_list/<shopping_list_id>', methods=['GET', 'POST'])
 @login_required
 def delete_shopping_list(shopping_list_id):
-    owner = current_user.id
-    shopping_lists = ShoppingList.query.filter_by(owner=owner)
-    current_shopping_list = ShoppingList.query.filter_by(id=shopping_list_id).first()
+    # owner = current_user.id
+    # shopping_lists = ShoppingList.query.filter_by(owner=owner)
+    shopping_list = ShoppingList.query.filter_by(id=shopping_list_id).first()
     # current_shopping_list_items = current_shopping_list.items
     form = AskDeleteShoppingListForm()
+    owner = current_user.id
+    shopping_lists = ShoppingList.query.filter_by(owner=owner)
     if request.method == 'GET':
-        return render_template("delete_shopping_list.html", title='Do you want to delete?', form=form)
+        return render_template("delete_shopping_list.html", title='Do you want to delete?', shopping_list=shopping_list, form=form)
     if form.validate_on_submit():
         if form.ask.data:
-            db.session.delete(current_shopping_list)
-            # db.session.delete(current_shopping_list_items)
+            db.session.delete(shopping_list)
             db.session.commit()
-            return render_template('all_lists.html', title='All Shopping Lists', owner=owner, shopping_lists=shopping_lists)
+            return render_template('all_lists.html', title='All Shopping Lists', shopping_lists=shopping_lists)
         else:
-            return render_template('all_lists.html', title='All Shopping Lists', owner=owner, shopping_lists=shopping_lists)
+            return render_template('all_lists.html', title='All Shopping Lists', shopping_lists=shopping_lists)
 
 
 @app.route('/shopping_list', methods=['GET', 'POST'])

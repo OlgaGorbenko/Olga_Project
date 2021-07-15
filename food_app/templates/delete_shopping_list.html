@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Do you want to delete shopping list <font color="#1e90ff">{{ current_shopping_list }}</font>?</h1>
+<h1>Do you want to delete shopping list? </h1>
 
 
-<h4><div><p><p style="margin-left:1.5em">{{ current_shopping_list }}</p></div></h4>
+<h4><div><p><p style="margin-left:1.5em">{{ shopping_list }}</p></div></h4>
 
-    <div>
-{{ current_shopping_list_items }}    </div>
+    <div><ul>  {% for item in shopping_list.items %}
+        <li>{{ item }}</li> </ul></div>
 
 
   <form action="" method="post">
@@ -19,4 +19,6 @@
         </p>
         <p><p style="margin-left:1.5em">{{ form.submit() }}</p>
     </form></p>
+
+{% endfor %}
 {% endblock %}
