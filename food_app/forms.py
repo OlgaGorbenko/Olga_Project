@@ -88,8 +88,10 @@ def all_lists_titles():
 
 class AskDeleteShoppingListForm(FlaskForm):
     ask = SelectField('Delete?', choices=[
-        (True, 'yes'),
-        (False, 'no'),
+        ('yes', 'yes'),
+        ('no', 'no'),
+        # (True, 'yes'),
+        # (False, 'no'),
     ])
     submit = SubmitField('   Submit   ')
 

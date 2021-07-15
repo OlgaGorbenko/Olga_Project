@@ -157,20 +157,37 @@ def edit_shopping_list(shopping_list_id):
     return render_template('edit_shopping_list.html', shopping_list=shopping_list)
 
 
+@app.route('/edit_shopping_list/<shopping_list_id>/<item_id>', methods=['GET', 'POST'])
+@login_required
+def delete_shopping_list_item(item_id):
+    item = ShoppingListItem.query.filter_by(id=item_id).first()
+    form = AskDeleteShoppingListForm()
+    if request.method == 'GET':
+        return render_template("delete_list_item.html", title='Do you want to delete?', item=item, form=form)
+    if form.validate_on_submit():
+        if form.ask.data == 'yes':
+            db.session.delete(item)
+            db.session.commit()
+            return render_template('edit_shopping_list.html', shopping_list=shopping_list)
+        else:
+            return render_template('edit_shopping_list.html', shopping_list=shopping_list)
+
+
 @app.route('/delete_shopping_list/<shopping_list_id>', methods=['GET', 'POST'])
 @login_required
 def delete_shopping_list(shopping_list_id):
-    # owner = current_user.id
-    # shopping_lists = ShoppingList.query.filter_by(owner=owner)
     shopping_list = ShoppingList.query.filter_by(id=shopping_list_id).first()
-    # current_shopping_list_items = current_shopping_list.items
+    # shopping_list_item = ShoppingListItem.query.filter_by(shopping_list_id=shopping_list_id)
+    # shopping_list_item = ShoppingListItem.query.get(shopping_list_id)
     form = AskDeleteShoppingListForm()
     owner = current_user.id
     shopping_lists = ShoppingList.query.filter_by(owner=owner)
     if request.method == 'GET':
         return render_template("delete_shopping_list.html", title='Do you want to delete?', shopping_list=shopping_list, form=form)
     if form.validate_on_submit():
-        if form.ask.data:
+        if form.ask.data == 'yes':
+            # db.session.delete(shopping_list_item)
+            # db.session.commit()
             db.session.delete(shopping_list)
             db.session.commit()
             return render_template('all_lists.html', title='All Shopping Lists', shopping_lists=shopping_lists)
