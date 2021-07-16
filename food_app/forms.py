@@ -81,11 +81,6 @@ class NewShoppingListForm(FlaskForm):
             raise ValidationError('This title already exists.')
 
 
-def all_lists_titles():
-    owner = current_user.id
-    return ShoppingList.query.filter_by(owner=owner)
-
-
 class AskDeleteShoppingListForm(FlaskForm):
     ask = SelectField('Delete?', choices=[
         ('yes', 'yes'),
@@ -94,6 +89,11 @@ class AskDeleteShoppingListForm(FlaskForm):
         # (False, 'no'),
     ])
     submit = SubmitField('   Submit   ')
+
+
+def all_lists_titles():
+    owner = current_user.id
+    return ShoppingList.query.filter_by(owner=owner)
 
 
 class AddPortionsForm(FlaskForm):
@@ -112,11 +112,6 @@ def all_products_titles():
     return Product.query.order_by(Product.title)
 
 
-class SelectProductToAddForm(FlaskForm):
-    select_product_to_add = QuerySelectField('Product', query_factory=all_products_titles, allow_blank=False)
-    submit = SubmitField('  Select Product  ')
-
-
 class AddProductToListForm(FlaskForm):
     shopping_list = QuerySelectField('Select a Shopping List', query_factory=all_lists_titles, allow_blank=False)
     # product_to_add = QuerySelectField('Product', query_factory=all_products_titles, allow_blank=False)
@@ -125,8 +120,35 @@ class AddProductToListForm(FlaskForm):
     submit = SubmitField('      Add to Shopping List      ')
 
 
+def all_recipes_titles():
+    owner = current_user.id
+    return Recipe.query.filter_by(owner=owner)
+
+
+class AddProductToRecipeForm(FlaskForm):
+    recipe = QuerySelectField('Select a Recipe', query_factory=all_recipes_titles, allow_blank=False)
+    # product_to_add = QuerySelectField('Product', query_factory=all_products_titles, allow_blank=False)
+    quantity = IntegerField('Quantity', default=1)
+    # unit_of_measure = SelectField('Unit of Measure', choices=units_of_measure)
+    submit = SubmitField('           Add to Recipe           ')
+
+    def validate_title(self, title):
+        product = Product.query.filter_by(title=title.data).first()
+        if product is not None:
+            raise ValidationError('This product is already in recipe.')
+
+
+
+
+
 class ChangeQuantityItemForm(FlaskForm):
     # item = ShoppingListItem.query.filter_by(id=item_id).first()
     quantity = IntegerField('Quantity', default=0)
     submit = SubmitField('Submit')
+
+
+
+class SelectProductToAddForm(FlaskForm):
+    select_product_to_add = QuerySelectField('Product', query_factory=all_products_titles, allow_blank=False)
+    submit = SubmitField('  Select Product  ')
 

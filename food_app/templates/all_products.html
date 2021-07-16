@@ -8,9 +8,21 @@
         <p style="margin-left:1.5em">{{ product }} </p></div>
 </h5>
 
-<p style="margin-left:1.5em"><a href="{{ url_for('add_product_to_list', product_id=product.id) }}">
-    <button> Add to Shopping List</button>
-</a>
+<head>
+  <style>
+   form {
+    display: inline-block;
+}
+   </style>
+</head>
+
+
+<form action="{{ url_for('add_product_to_list', product_id=product.id) }}">
+    <p style="margin-left:1.5em"><input class="button" type="submit" value="Add to Shopping List"></p>
+</form>
+<form action="{{ url_for('add_product_to_recipe', product_id=product.id) }}">
+    <input class="button" type="submit" value="Add to Recipe">
+</form>
 
 
     {% endfor %}

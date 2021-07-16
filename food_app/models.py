@@ -81,6 +81,7 @@ class ShoppingListItem(db.Model):
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(256), index=True, unique=True, nullable=False)
+    owner = db.Column(db.ForeignKey('user.id'))
     ingredients = db.relationship('Ingredient', backref='recipe', lazy='dynamic')
     description = db.Column(db.Text)
 

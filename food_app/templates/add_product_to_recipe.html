@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div><p> </p></div>
+
+<h1>Add <font color="#1e90ff">{{ current_product }}</font> to Recipe</h1>
+
+  <form action="" method="post">
+
+        {{ form.hidden_tag() }}
+        <p>
+            <p style="margin-left:1.5em">{{ form.recipe.label }}<br>
+            {{ form.recipe }}<br>
+        </p>
+        <p>
+            <p style="margin-left:1.5em">{{ form.quantity.label }} ({{ current_product.unit_of_measure }})<br>
+
+            {{ form.quantity }}<br>
+        </p>
+        <p><p style="margin-left:1.5em">{{ form.submit() }}</p>
+    </form></p>
+{% endblock %}
