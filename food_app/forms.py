@@ -132,14 +132,6 @@ class AddProductToRecipeForm(FlaskForm):
     # unit_of_measure = SelectField('Unit of Measure', choices=units_of_measure)
     submit = SubmitField('           Add to Recipe           ')
 
-    def validate_title(self, title):
-        product = Product.query.filter_by(title=title.data).first()
-        if product is not None:
-            raise ValidationError('This product is already in recipe.')
-
-
-
-
 
 class ChangeQuantityItemForm(FlaskForm):
     # item = ShoppingListItem.query.filter_by(id=item_id).first()
