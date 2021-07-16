@@ -60,7 +60,7 @@ class AddProductForm(FlaskForm):
 
 class AddRecipeForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
-    ingredients = StringField('Ingredients')
+    # ingredients = StringField('Ingredients')
     description = TextField('Description')
     submit = SubmitField('   Add   ')
 
