@@ -258,7 +258,6 @@ def add_product_to_list(product_id):
 @login_required
 def add_portions(recipe_id):
     current_recipe = Recipe.query.filter_by(id=recipe_id).first()
-    # ingredients = current_recipe.return_ingredients(recipe_id)
     form = AddPortionsForm()
 
     if not form.validate_on_submit():
@@ -267,23 +266,23 @@ def add_portions(recipe_id):
         )
     shopping_list: ShoppingList = form.title_list.data
 
-    item = ShoppingListItem.quaery.filter_by(shopping_list_id=form.title_list.data.id)
-    items = list(item.product)
+    item = ShoppingListItem.query.filter_by(shopping_list_id=form.title_list.data.id)
+    # items = list(item.product)
+    items = shopping_list.items
 
-    ingredients = Ingredient.quaery.filter_by(recipe_id=current_recipe.id)
+    ingredients = Ingredient.query.filter_by(recipe_id=current_recipe.id)
 
     for ingredient in ingredients:
         if ingredient.product in items:
             item.quantity += ingredient.quantity * int(form.number_of_portions.data)
-            # item = ShoppingListItem(
-            #     shopping_list_id=form.title_list.data.id,
-            #     product_id=Ingredient.query.filter_by(recipe_id=recipe_id).first().product_id,
-            #     product=Ingredient.query.filter_by(recipe_id=recipe_id).first().product,
-            #     quantity=Ingredient.query.filter_by(recipe_id=recipe_id).first().quantity * int(
-            #         form.number_of_portions.data),
-            #     unit_of_measure=Ingredient.query.filter_by(recipe_id=recipe_id).first().unit_of_measure,
-            #     is_buyed=False)
-            # db.session.add(quantity)
+            item = ShoppingListItem(
+                shopping_list_id=form.title_list.data.id,
+                product_id=Ingredient.query.filter_by(recipe_id=recipe_id).first().product_id,
+                product=Ingredient.query.filter_by(recipe_id=recipe_id).first().product,
+                quantity=Ingredient.query.filter_by(recipe_id=recipe_id).first().quantity + item.quantity,
+                unit_of_measure=Ingredient.query.filter_by(recipe_id=recipe_id).first().unit_of_measure,
+                is_buyed=False)
+            db.session.add(item)
             db.session.commit()
             flash('Items have been successfully changed!')
             return redirect(url_for('shopping_list'))
