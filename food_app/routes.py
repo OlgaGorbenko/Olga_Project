@@ -317,7 +317,8 @@ def add_portions(recipe_id):
         item.quantity += ingredient.quantity * int(form.number_of_portions.data)
         # Save
 
-
+        db.session.commit()
+        return redirect(url_for('shopping_list', ))
 
 
 
@@ -349,8 +350,7 @@ def add_portions(recipe_id):
         #     db.session.commit()
         #     flash('New items have been successfully added!')
 
-    db.session.commit()
-    return redirect(url_for('shopping_list', ))
+
 
 
 
