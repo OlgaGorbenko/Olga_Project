@@ -133,17 +133,18 @@ def add_product_to_recipe(product_id):
     owner = current_user.id
     form = AddProductToRecipeForm()
     current_product = Product.query.filter_by(id=product_id).first()
-    current_recipe = Recipe.query.filter_by(title=form.recipe.data).first()
+    current_recipe = form.recipe.data
 
     if request.method == 'GET':
-        return render_template("add_product_to_recipe.html", title='Add Product to Recipe', current_product=current_product, owner=owner, form=form)
+        return render_template("add_product_to_recipe.html", title='Add Product to Recipe',
+                               current_product=current_product, owner=owner, form=form)
     if form.validate_on_submit():
         ingredient = Ingredient(
             recipe_id=current_recipe.id,
             product_id=product_id,
             product=current_product,
             quantity=form.quantity.data,
-            unit_of_measur=current_product.unit_of_measure,
+            unit_of_measure=current_product.unit_of_measure,
         )
         db.session.add(ingredient)
         db.session.commit()
@@ -193,15 +194,15 @@ def change_quantity_item(item_id):
         return render_template("change_quantity_item.html", title='Do you want to change quantity?', item=item,
                                form=form)
     if form.validate_on_submit():
-        quantity = form.quantity.data    #??? How can I did it correct?
+        quantity = form.quantity.data  # ??? How can I did it correct?
         db.session.add(quantity)
         db.session.commit()
         return render_template('edit_shopping_list.html', shopping_list=shopping_list)
 
 
-@app.route('/edit_shopping_list/shopping_list_id/<item_id>', methods=['GET', 'POST'])
+@app.route('/edit_shopping_list/<shopping_list_id>/<item_id>', methods=['GET', 'POST'])
 @login_required
-def delete_shopping_list_item(item_id):
+def delete_shopping_list_item(shopping_list_id, item_id):
     item = ShoppingListItem.query.filter_by(id=item_id).first()
     form = AskDeleteShoppingListForm()
     if request.method == 'GET':
@@ -290,48 +291,68 @@ def add_portions(recipe_id):
 
     if not form.validate_on_submit():
         return render_template(
-            "add_portions.html", title='Shopping List', current_recipe=current_recipe, form=form
-        )
+            "add_portions.html", title='Shopping List', current_recipe=current_recipe, form=form)
 
-    shopping_list: ShoppingList = form.title_list.data
+    shopping_list = form.title_list.data
 
-    ingredients = list(Ingredient.query.filter_by(recipe_id=current_recipe.id))
-    items = ShoppingList.query.filter_by(title=form.title_list.data).items
+    for ingredient in current_recipe.ingredients:
 
-    for ingredient in ingredients:
-        if ingredient.product_id in items:
-            portion_quantity = ingredient.quantity * int(form.number_of_portions.data)
-            item = ShoppingListItem(
-                shopping_list_id=form.title_list.data.id,
-                product_id=Ingredient.query.filter_by(recipe_id=recipe_id).product_id,
-                product=Ingredient.query.filter_by(recipe_id=recipe_id).product,
-                quantity=ShoppingListItem.query.filter_by(shopping_list_id=form.shopping_list.data).quantity + portion_quantity,
-                unit_of_measure=Ingredient.query.filter_by(recipe_id=recipe_id).unit_of_measure,
-                is_buyed=False)
-            db.session.add(item)
-            db.session.commit()
-            flash('Items have been successfully changed!')
+        filtered_items = list(filter(
+            lambda item: ingredient.product_id == item.product_id,
+            shopping_list.items
+        ))
 
+        if filtered_items:
+            # Use existed item
+            item = filtered_items[0]
         else:
-            item = ShoppingListItem(
-                shopping_list_id=form.title_list.data.id,
-                product_id=Ingredient.query.filter_by(recipe_id=recipe_id).first().product_id,
-                product=Ingredient.query.filter_by(recipe_id=recipe_id).first().product,
-                quantity=Ingredient.query.filter_by(recipe_id=recipe_id).first().quantity * int(
-                    form.number_of_portions.data),
-                unit_of_measure=Ingredient.query.filter_by(recipe_id=recipe_id).first().unit_of_measure,
-                is_buyed=False)
+            # Create new ShoppingListItem.
+            #   Then, add it to ShoppingList. Add to field, which related by ForeignKey. We can add item as to list.
+            #   Remember to make save.
+            item = ShoppingListItem(product_id=ingredient.product_id, unit_of_measure=ingredient.unit_of_measure,
+                                    quantity=0, )
             shopping_list.items.append(item)
-            db.session.add(item)
-            db.session.commit()
-            flash('New items have been successfully added!')
-    return redirect(url_for('shopping_list'))
+
+        # Change quantity
+        item.quantity += ingredient.quantity * int(form.number_of_portions.data)
+        # Save
 
 
 
 
 
-# owner = current_user.id
+
+        # if ingredient.product_id in items:
+        #     portion_quantity = ingredient.quantity * int(form.number_of_portions.data)
+        #     item = ShoppingListItem(
+        #         shopping_list_id=shopping_list.id,
+        #         product_id=Ingredient.query.filter_by(recipe_id=recipe_id).first().product_id,
+        #         product=Ingredient.query.filter_by(recipe_id=recipe_id).first().product,
+        #         quantity=ShoppingListItem.query.filter_by(shopping_list_id=form.shopping_list.data).first().quantity + portion_quantity,
+        #         unit_of_measure=Ingredient.query.filter_by(recipe_id=recipe_id).first().unit_of_measure,
+        #         is_buyed=False)
+        #     db.session.add(item)
+        #     db.session.commit()
+        #     flash('Items have been successfully changed!')
+        #
+        # else:
+        #     item = ShoppingListItem(
+        #         shopping_list_id=shopping_list.id,
+        #         product_id=Ingredient.query.filter_by(recipe_id=recipe_id).first().product_id,
+        #         product=Ingredient.query.filter_by(recipe_id=recipe_id).first().product,
+        #         quantity=Ingredient.query.filter_by(recipe_id=recipe_id).first().quantity * int(
+        #             form.number_of_portions.data),
+        #         unit_of_measure=Ingredient.query.filter_by(recipe_id=recipe_id).first().unit_of_measure,
+        #         is_buyed=False)
+        #     shopping_list.items.append(item)
+        #     db.session.add(item)
+        #     db.session.commit()
+        #     flash('New items have been successfully added!')
+
+    db.session.commit()
+    return redirect(url_for('shopping_list', ))
+
+
 
 
 # def show_user(username):
