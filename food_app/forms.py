@@ -136,7 +136,7 @@ class AddProductToRecipeForm(FlaskForm):
 class ChangeQuantityItemForm(FlaskForm):
     # item = ShoppingListItem.query.filter_by(id=item_id).first()
     quantity = IntegerField('Quantity', default=0)
-    submit = SubmitField('Submit')
+    submit = SubmitField('                 Submit                 ')
 
 
 

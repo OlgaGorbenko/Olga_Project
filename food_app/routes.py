@@ -202,7 +202,7 @@ def change_quantity_item(item_id):
 
 @app.route('/edit_shopping_list/<shopping_list_id>/<item_id>', methods=['GET', 'POST'])
 @login_required
-def delete_shopping_list_item(shopping_list_id, item_id):
+def delete_shopping_list_item(shopping_list_id: int, item_id):
     item = ShoppingListItem.query.filter_by(id=item_id).first()
     form = AskDeleteShoppingListForm()
     if request.method == 'GET':
@@ -211,9 +211,9 @@ def delete_shopping_list_item(shopping_list_id, item_id):
         if form.ask.data == 'yes':
             db.session.delete(item)
             db.session.commit()
-            return render_template('edit_shopping_list.html', shopping_list=shopping_list)
+            return redirect(url_for('edit_shopping_list', shopping_list_id=shopping_list_id))
         else:
-            return render_template('edit_shopping_list.html', shopping_list=shopping_list)
+            return redirect(url_for('edit_shopping_list', shopping_list_id=shopping_list_id))
 
 
 @app.route('/delete_shopping_list/<shopping_list_id>', methods=['GET', 'POST'])
