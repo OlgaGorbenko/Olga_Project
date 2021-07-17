@@ -187,17 +187,18 @@ def edit_shopping_list(shopping_list_id):
 
 @app.route('/edit_shopping_list/shopping_list_id/<item_id>', methods=['GET', 'POST'])
 @login_required
-def change_quantity_item(item_id):
+def change_quantity_item(shopping_list_id: int, item_id):
     item = ShoppingListItem.query.filter_by(id=item_id).first()
     form = ChangeQuantityItemForm()
     if request.method == 'GET':
         return render_template("change_quantity_item.html", title='Do you want to change quantity?', item=item,
                                form=form)
     if form.validate_on_submit():
-        quantity = form.quantity.data  # ??? How can I did it correct?
-        db.session.add(quantity)
+        item.quantity = form.quantity.data
+        # quantity = form.quantity.data  # ??? How can I did it correct?
+        # db.session.add(quantity)
         db.session.commit()
-        return render_template('edit_shopping_list.html', shopping_list=shopping_list)
+        return redirect(url_for('edit_shopping_list', shopping_list_id=shopping_list_id))
 
 
 @app.route('/edit_shopping_list/<shopping_list_id>/<item_id>', methods=['GET', 'POST'])
