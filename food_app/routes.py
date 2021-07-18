@@ -185,9 +185,9 @@ def edit_shopping_list(shopping_list_id):
     return render_template('edit_shopping_list.html', shopping_list=shopping_list)
 
 
-@app.route('/edit_shopping_list/shopping_list_id/<item_id>', methods=['GET', 'POST'])
+@app.route('/change_quantity_item/<shopping_list_id>/<item_id>', methods=['GET', 'POST'])
 @login_required
-def change_quantity_item(shopping_list_id: int, item_id):
+def change_quantity_item(shopping_list_id, item_id):
     item = ShoppingListItem.query.filter_by(id=item_id).first()
     form = ChangeQuantityItemForm()
     if request.method == 'GET':
@@ -195,15 +195,14 @@ def change_quantity_item(shopping_list_id: int, item_id):
                                form=form)
     if form.validate_on_submit():
         item.quantity = form.quantity.data
-        # quantity = form.quantity.data  # ??? How can I did it correct?
-        # db.session.add(quantity)
         db.session.commit()
+        # return render_template('edit_shopping_list', shopping_list_id=shopping_list_id)
         return redirect(url_for('edit_shopping_list', shopping_list_id=shopping_list_id))
 
 
-@app.route('/edit_shopping_list/<shopping_list_id>/<item_id>', methods=['GET', 'POST'])
+@app.route('/delete_list_item/<shopping_list_id>/<item_id>', methods=['GET', 'POST'])
 @login_required
-def delete_shopping_list_item(shopping_list_id: int, item_id):
+def delete_shopping_list_item(shopping_list_id, item_id):
     item = ShoppingListItem.query.filter_by(id=item_id).first()
     form = AskDeleteShoppingListForm()
     if request.method == 'GET':
@@ -221,19 +220,30 @@ def delete_shopping_list_item(shopping_list_id: int, item_id):
 @login_required
 def delete_shopping_list(shopping_list_id):
     shopping_list = ShoppingList.query.filter_by(id=shopping_list_id).first()
-    # shopping_list_item = ShoppingListItem.query.filter_by(shopping_list_id=shopping_list_id)
+    item = ShoppingListItem.query.filter_by(shopping_list_id=shopping_list_id)
     # shopping_list_item = ShoppingListItem.query.get(shopping_list_id)
     form = AskDeleteShoppingListForm()
     owner = current_user.id
     shopping_lists = ShoppingList.query.filter_by(owner=owner)
+
     if request.method == 'GET':
         return render_template("delete_shopping_list.html", title='Do you want to delete?', shopping_list=shopping_list,
                                form=form)
     if form.validate_on_submit():
         if form.ask.data == 'yes':
-            # db.session.delete(shopping_list_item)
-            # db.session.commit()
-            db.session.delete(shopping_list)
+            for item in shopping_list.items:
+                filtered_items = list(filter(
+            lambda item: shopping_list.id == item.shopping_list_id,
+            shopping_list.items
+        ))
+                if filtered_items:
+                    item = filtered_items[0]
+                    db.session.delete(item)
+                # else:
+                db.session.delete(shopping_list)
+            # db.session.delete(item)
+            # # db.session.commit()
+            # db.session.delete(shopping_list)
             db.session.commit()
             return render_template('all_lists.html', title='All Shopping Lists', shopping_lists=shopping_lists)
         else:
@@ -310,7 +320,8 @@ def add_portions(recipe_id):
             # Create new ShoppingListItem.
             #   Then, add it to ShoppingList. Add to field, which related by ForeignKey. We can add item as to list.
             #   Remember to make save.
-            item = ShoppingListItem(product_id=ingredient.product_id, unit_of_measure=ingredient.unit_of_measure,
+            item = ShoppingListItem(product_id=ingredient.product_id,
+                                    unit_of_measure=ingredient.unit_of_measure,
                                     quantity=0, )
             shopping_list.items.append(item)
 
@@ -319,7 +330,10 @@ def add_portions(recipe_id):
         # Save
 
         db.session.commit()
-        return redirect(url_for('shopping_list', ))
+        return redirect(url_for('all_lists'))
+
+
+
 
 
 
