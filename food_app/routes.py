@@ -231,23 +231,18 @@ def delete_shopping_list(shopping_list_id):
                                form=form)
     if form.validate_on_submit():
         if form.ask.data == 'yes':
-            for item in shopping_list.items:
-                filtered_items = list(filter(
+            # for item in shopping_list.items:
+            filtered_items = list(filter(
             lambda item: shopping_list.id == item.shopping_list_id,
-            shopping_list.items
-        ))
-                if filtered_items:
-                    item = filtered_items[0]
-                    db.session.delete(item)
-                # else:
-                db.session.delete(shopping_list)
-            # db.session.delete(item)
-            # # db.session.commit()
-            # db.session.delete(shopping_list)
-            db.session.commit()
-            return render_template('all_lists.html', title='All Shopping Lists', shopping_lists=shopping_lists)
-        else:
-            return render_template('all_lists.html', title='All Shopping Lists', shopping_lists=shopping_lists)
+            shopping_list.items))
+            if filtered_items:
+                item = filtered_items[0]
+                db.session.delete(item)
+            db.session.delete(shopping_list)
+        db.session.commit()
+        return render_template('all_lists.html', title='All Shopping Lists', shopping_lists=shopping_lists)
+    else:
+        return render_template('all_lists.html', title='All Shopping Lists', shopping_lists=shopping_lists)
 
 
 @app.route('/shopping_list', methods=['GET', 'POST'])
