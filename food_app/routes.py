@@ -174,7 +174,7 @@ def new_list():
         db.session.add(shopping_list)
         db.session.commit()
         flash('New shopping list has been successfully created!')
-        return redirect(url_for('shopping_list'))
+        return redirect(url_for('all_lists'))
     return render_template('new_list.html', title='ShoppingList', form=form)
 
 
@@ -221,7 +221,6 @@ def delete_shopping_list_item(shopping_list_id, item_id):
 def delete_shopping_list(shopping_list_id):
     shopping_list = ShoppingList.query.filter_by(id=shopping_list_id).first()
     item = ShoppingListItem.query.filter_by(shopping_list_id=shopping_list_id)
-    # shopping_list_item = ShoppingListItem.query.get(shopping_list_id)
     form = AskDeleteShoppingListForm()
     owner = current_user.id
     shopping_lists = ShoppingList.query.filter_by(owner=owner)
@@ -309,20 +308,14 @@ def add_portions(recipe_id):
         ))
 
         if filtered_items:
-            # Use existed item
             item = filtered_items[0]
         else:
-            # Create new ShoppingListItem.
-            #   Then, add it to ShoppingList. Add to field, which related by ForeignKey. We can add item as to list.
-            #   Remember to make save.
             item = ShoppingListItem(product_id=ingredient.product_id,
                                     unit_of_measure=ingredient.unit_of_measure,
-                                    quantity=0, )
+                                    quantity=0)
             shopping_list.items.append(item)
 
-        # Change quantity
         item.quantity += ingredient.quantity * int(form.number_of_portions.data)
-        # Save
 
         db.session.commit()
         return redirect(url_for('all_lists'))
