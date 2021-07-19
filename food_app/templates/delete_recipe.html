@@ -5,7 +5,7 @@
 
 
 <h4><div><p><p style="margin-left:1.5em"><font color="#1e90ff">{{ current_recipe }}</font></p></div></h4>
-
+    <div><p><p style="margin-left:1.5em">{{ current_recipe.description }}</p></div>
 
     <div><ul>  {% for ingredient in current_recipe.ingredients %}
         <li>{{ ingredient }}</li>

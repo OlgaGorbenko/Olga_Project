@@ -70,7 +70,7 @@ class AddRecipeForm(FlaskForm):
             raise ValidationError('This title already exists.')
 
 
-class AskDeleteRecipe(FlaskForm):
+class AskDeleteRecipeForm(FlaskForm):
     ask = SelectField('Delete?', choices=[
         ('yes', 'yes'),
         ('no', 'no'),
@@ -148,6 +148,16 @@ class ChangeQuantityItemForm(FlaskForm):
     quantity = IntegerField('Quantity', default=0)
     submit = SubmitField('                 Submit                 ')
 
+
+class ChangeQuantityIngredientForm(FlaskForm):
+    # item = ShoppingListItem.query.filter_by(id=item.id).first()
+    quantity = IntegerField('Quantity', default=0)
+    submit = SubmitField('                 Submit                 ')
+
+
+class EditDescriptionForm(FlaskForm):
+    description = TextField('Description')
+    submit = SubmitField('                 Submit                 ')
 
 
 class SelectProductToAddForm(FlaskForm):

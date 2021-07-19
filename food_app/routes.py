@@ -4,7 +4,7 @@ from werkzeug.urls import url_parse
 
 from food_app.forms import LoginForm, RegistrationForm, AddProductForm, AddRecipeForm, NewShoppingListForm, \
     AddPortionsForm, AddProductToListForm, SelectProductToAddForm, AskDeleteShoppingListForm, ChangeQuantityItemForm, \
-    AddProductToRecipeForm, AskDeleteRecipe
+    AddProductToRecipeForm, ChangeQuantityIngredientForm, AskDeleteRecipeForm, EditDescriptionForm
 from food_app.models import User, Product, Recipe, ShoppingList, Ingredient, ShoppingListItem
 from .app_factory import app, db
 
@@ -101,7 +101,7 @@ def recipe():
     return render_template("recipe.html", title='Recipe')
 
 
-@app.route('/all_recipes', methods=['GET', 'POST'])
+@app.route('/my_recipes', methods=['GET', 'POST'])
 @login_required
 def my_recipes():
     owner = current_user.id
@@ -112,6 +112,7 @@ def my_recipes():
         owner=owner,
         my_recipes=my_recipes,
     )
+
 
 @app.route('/all_recipes', methods=['GET', 'POST'])
 @login_required
@@ -143,7 +144,7 @@ def add_recipe():
 @login_required
 def delete_recipe(recipe_id):
     current_recipe = Recipe.query.filter_by(id=recipe_id).first()
-    form = AskDeleteRecipe()
+    form = AskDeleteRecipeForm()
     owner = current_user.id
     recipes = Recipe.query.filter_by(owner=owner)
 
@@ -162,9 +163,9 @@ def delete_recipe(recipe_id):
                 db.session.delete(ingredient)
             db.session.delete(current_recipe)
         db.session.commit()
-        return redirect(url_for('all_recipes'))
+        return redirect(url_for('my_recipes'))
     else:
-        return redirect(url_for('all_recipes'))
+        return redirect(url_for('my_recipes'))
 
 
 @app.route('/add_product_to_recipe/<product_id>', methods=['GET', 'POST'])
@@ -215,11 +216,49 @@ def new_list():
     return render_template('new_list.html', title='ShoppingList', form=form)
 
 
+@app.route('/edit_recipe/<recipe_id>', methods=['GET', 'POST'])
+@login_required
+def edit_recipe(recipe_id):
+    recipe = Recipe.query.filter_by(id=recipe_id).first()
+    description = recipe.description
+    return render_template('edit_recipe.html', recipe=recipe, description=description)
+
+
+@app.route('/edit_recipe_description/<recipe_id>/<description_id>', methods=['GET', 'POST'])
+@login_required
+def edit_recipe_description(recipe_id, description_id):
+    description = Recipe.query.filter_by(id=description_id).first()
+    form = EditDescriptionForm()
+    if request.method == 'GET':
+        return render_template("edit_recipe_description.html", title='Do you want to edit description?', description=description,
+                               form=form)
+    if form.validate_on_submit():
+        recipe.description = form.description.data
+        db.session.commit()
+        return redirect(url_for('edit_recipe', recipe_id=recipe_id))
+
+
+
+
 @app.route('/edit_shopping_list/<shopping_list_id>', methods=['GET', 'POST'])
 @login_required
 def edit_shopping_list(shopping_list_id):
     shopping_list = ShoppingList.query.filter_by(id=shopping_list_id).first()
     return render_template('edit_shopping_list.html', shopping_list=shopping_list)
+
+
+@app.route('/change_quantity_ingredient/<recipe_id>/<ingredient_id>', methods=['GET', 'POST'])
+@login_required
+def change_quantity_ingredient(recipe_id, ingredient_id):
+    ingredient = Ingredient.query.filter_by(id=ingredient_id).first()
+    form = ChangeQuantityIngredientForm()
+    if request.method == 'GET':
+        return render_template("change_quantity_ingredient.html", title='Do you want to change quantity?', ingredient=ingredient,
+                               form=form)
+    if form.validate_on_submit():
+        ingredient.quantity = form.quantity.data
+        db.session.commit()
+        return redirect(url_for('edit_recipe', recipe_id=recipe_id))
 
 
 @app.route('/change_quantity_item/<shopping_list_id>/<item_id>', methods=['GET', 'POST'])
@@ -234,6 +273,22 @@ def change_quantity_item(shopping_list_id, item_id):
         item.quantity = form.quantity.data
         db.session.commit()
         return redirect(url_for('edit_shopping_list', shopping_list_id=shopping_list_id))
+
+
+@app.route('/delete_recipe_ingredient/<recipe_id>/<ingredient_id>', methods=['GET', 'POST'])
+@login_required
+def delete_recipe_ingredient(recipe_id, ingredient_id):
+    ingredient = Ingredient.query.filter_by(id=ingredient_id).first()
+    form = AskDeleteRecipeForm()
+    if request.method == 'GET':
+        return render_template("delete_recipe_ingredient.html", title='Do you want to delete?', ingredient=ingredient, form=form)
+    if form.validate_on_submit():
+        if form.ask.data == 'yes':
+            db.session.delete(ingredient)
+            db.session.commit()
+            return redirect(url_for('edit_recipe', recipe_id= recipe_id))
+        else:
+            return redirect(url_for('edit_recipe', recipe_id= recipe_id))
 
 
 @app.route('/delete_list_item/<shopping_list_id>/<item_id>', methods=['GET', 'POST'])

@@ -137,3 +137,13 @@ Ricotta and lemon ring cake
 <img src="https://images.unsplash.com/photo-1493770348161-369560ae357d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80" alt="Trulli" width="470" height="300" vspace="5" hspace="5">
 =====
 #bootstrap-flask==1.7.0
+=====
+edit_recipe    inline block:
+
+
+<form action="{{ url_for('change_quantity_item', shopping_list_id=shopping_list.id, item_id=item.id) }}">
+    <input class="button" type="submit" value="Change quantity">
+</form>
+<form action="{{ url_for('delete_shopping_list_item', shopping_list_id=shopping_list.id, item_id=item.id) }}">
+    <input class="button" type="submit" value="Delete">
+</form>
