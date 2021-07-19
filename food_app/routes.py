@@ -4,7 +4,7 @@ from werkzeug.urls import url_parse
 
 from food_app.forms import LoginForm, RegistrationForm, AddProductForm, AddRecipeForm, NewShoppingListForm, \
     AddPortionsForm, AddProductToListForm, SelectProductToAddForm, AskDeleteShoppingListForm, ChangeQuantityItemForm, \
-    AddProductToRecipeForm
+    AddProductToRecipeForm, AskDeleteRecipe
 from food_app.models import User, Product, Recipe, ShoppingList, Ingredient, ShoppingListItem
 from .app_factory import app, db
 
@@ -127,6 +127,39 @@ def add_recipe():
     return render_template('add_recipe.html', title='Recipe', form=form)
 
 
+@app.route('/delete_recipe/<recipe_id>', methods=['GET', 'POST'])
+@login_required
+def delete_recipe(recipe_id):
+    current_recipe = Recipe.query.filter_by(id=recipe_id).first()
+    # ingredient = Ingredient.query.filter_by(recipe_id=recipe_id)
+    form = AskDeleteRecipe()
+    owner = current_user.id
+    recipes = Recipe.query.filter_by(owner=owner)
+
+    if request.method == 'GET':
+        return render_template("delete_recipe.html", title='Do you want to delete?', current_recipe=current_recipe,
+                               form=form)
+    if form.validate_on_submit():
+        if form.ask.data == 'yes':
+            # for item in shopping_list.items:
+            filtered_ingredients = list(filter(
+            lambda ingredient: current_recipe.id == ingredient.recipe_id,
+            current_recipe.ingredients
+        ))
+            if filtered_ingredients:
+                ingredient = filtered_ingredients[0]
+                db.session.delete(ingredient)
+            db.session.delete(current_recipe)
+        db.session.commit()
+        return redirect(url_for('all_recipes'))
+    else:
+        return redirect(url_for('all_recipes'))
+
+    #     return render_template('all_recipes.html', title='All Recipes', recipes=recipes)
+    # else:
+    #     return render_template('all_recipes.html', title='All Recipes', recipes=recipes)
+
+
 @app.route('/add_product_to_recipe/<product_id>', methods=['GET', 'POST'])
 @login_required
 def add_product_to_recipe(product_id):
@@ -220,7 +253,6 @@ def delete_shopping_list_item(shopping_list_id, item_id):
 @login_required
 def delete_shopping_list(shopping_list_id):
     shopping_list = ShoppingList.query.filter_by(id=shopping_list_id).first()
-    item = ShoppingListItem.query.filter_by(shopping_list_id=shopping_list_id)
     form = AskDeleteShoppingListForm()
     owner = current_user.id
     shopping_lists = ShoppingList.query.filter_by(owner=owner)

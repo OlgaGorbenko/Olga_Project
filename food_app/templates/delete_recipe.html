@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Do you want to delete recipe? </h1>
+
+
+<h4><div><p><p style="margin-left:1.5em"><font color="#1e90ff">{{ current_recipe }}</font></p></div></h4>
+
+
+    <div><ul>  {% for ingredient in current_recipe.ingredients %}
+        <li>{{ ingredient }}</li>
+        {% endfor %}
+    </ul>
+    </div>
+
+
+
+
+  <form action="" method="post">
+
+        {{ form.hidden_tag() }}
+        <p>
+            <p style="margin-left:1.5em">{{ form.ask.label }}<br>
+            {{ form.ask }}<br>
+        </p>
+        <p><p style="margin-left:1.5em">{{ form.submit() }}</p>
+    </form></p>
+
+
+{% endblock %}

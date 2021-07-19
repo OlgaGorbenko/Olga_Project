@@ -133,3 +133,32 @@ Scrambled Eggs
 
 Preheat the oven to 160C and flour a ring or bundt tin approximately 23cm in diameter,. In a large bowl, mix together the flour, baking powder and sugar. In another bowl, whisk together the ricotta and olive oil, then add the eggs one by one, beating between each addition, until smooth. Add the ricotta mixture to the flour mixture and whisk until you have a thick batter. Add the lemon zest, stir again, then pour the batter into the prepared tin. Bake for 30-40 minutes if you are using a ring tin or until the cake is golden and fully set. Allow the cake to cool before turning it out of the tin and on to a plate.
 Ricotta and lemon ring cake
+
+<img src="https://images.unsplash.com/photo-1493770348161-369560ae357d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80" alt="Trulli" width="470" height="300" vspace="5" hspace="5">
+=====
+# @app.route('/delete_shopping_list/<shopping_list_id>', methods=['GET', 'POST'])
+# @login_required
+# def delete_shopping_list(shopping_list_id):
+#     shopping_list = ShoppingList.query.filter_by(id=shopping_list_id).first()
+#     item = ShoppingListItem.query.filter_by(shopping_list_id=shopping_list_id)
+#     form = AskDeleteShoppingListForm()
+#     owner = current_user.id
+#     shopping_lists = ShoppingList.query.filter_by(owner=owner)
+#
+#     if request.method == 'GET':
+#         return render_template("delete_shopping_list.html", title='Do you want to delete?', shopping_list=shopping_list,
+#                                form=form)
+#     if form.validate_on_submit():
+#         if form.ask.data == 'yes':
+#             # for item in shopping_list.items:
+#             filtered_items = list(filter(
+#             lambda item: shopping_list.id == item.shopping_list_id,
+#             shopping_list.items))
+#             if filtered_items:
+#                 item = filtered_items[0]
+#                 db.session.delete(item)
+#             db.session.delete(shopping_list)
+#         db.session.commit()
+#         return render_template('all_lists.html', title='All Shopping Lists', shopping_lists=shopping_lists)
+#     else:
+#         return render_template('all_lists.html', title='All Shopping Lists', shopping_lists=shopping_lists)@app.route('/delete_shopping_list/<shopping_list_id>', methods=['GET', 'POST'])

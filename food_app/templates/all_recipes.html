@@ -12,11 +12,24 @@
     </ul>
     </div>
 
-    <p style="margin-left:1.5em"><a href="{{ url_for('add_portions', recipe_id=recipe.id) }}">
-    <button> Add to Shopping List </button>
-    </a>
-{% endfor %}
 
+<head>
+  <style>
+   form {
+    display: inline-block;
+}
+   </style>
+</head>
+
+
+<form action="{{ url_for('add_portions', recipe_id=recipe.id) }}">
+    <p style="margin-left:1.5em"><input class="button" type="submit" value="Add to Shopping List"></p>
+</form>
+<form action="{{ url_for('delete_recipe', recipe_id=recipe.id) }}">
+    <input class="button" type="submit" value="Delete Recipe">
+</form>
+
+{% endfor %}
 
 
 <form>
