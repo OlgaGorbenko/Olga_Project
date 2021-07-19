@@ -350,7 +350,7 @@ def add_portions(recipe_id):
         item.quantity += ingredient.quantity * int(form.number_of_portions.data)
 
         db.session.commit()
-        return redirect(url_for('all_lists'))
+    return redirect(url_for('all_lists'))
 
 
 
