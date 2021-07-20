@@ -82,7 +82,7 @@ class AskDeleteRecipeForm(FlaskForm):
 
 class NewShoppingListForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
-    notes = TextField('Notes')
+    notes = TextField('Notes', default='Buy:')
     submit = SubmitField('   Create   ')
 
     def validate_title(self, title):
