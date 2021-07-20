@@ -224,18 +224,19 @@ def edit_recipe(recipe_id):
     return render_template('edit_recipe.html', recipe=recipe, description=description)
 
 
-@app.route('/edit_recipe_description/<recipe_id>/<description_id>', methods=['GET', 'POST'])
+@app.route('/edit_recipe_description/<recipe_id>/<recipe_description>', methods=['GET', 'POST'])
 @login_required
-def edit_recipe_description(recipe_id, description_id):
-    description = Recipe.query.filter_by(id=description_id).first()
+def edit_recipe_description(recipe_id, recipe_description):
+    recipe = Recipe.query.filter_by(id=recipe_id).first()
+    description = Recipe.query.filter_by(description=recipe_description).first()
     form = EditDescriptionForm()
     if request.method == 'GET':
-        return render_template("edit_recipe_description.html", title='Do you want to edit description?', description=description,
+        return render_template("edit_recipe_description.html", title='Do you want to edit description?', recipe=recipe, description=description,
                                form=form)
     if form.validate_on_submit():
         recipe.description = form.description.data
         db.session.commit()
-        return redirect(url_for('edit_recipe', recipe_id=recipe_id))
+        return redirect(url_for('edit_recipe', recipe_id=recipe_id, recipe_description=recipe_description))
 
 
 

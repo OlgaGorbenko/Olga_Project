@@ -4,8 +4,12 @@
 <h1>Do you want to edit description? </h1>
 
 
-<h4><div><p><p style="margin-left:1.5em"><font color="#1e90ff">{{ description }}</font></p></div></h4>
+<h4><div><p><p style="margin-left:1.5em"><font color="#1e90ff">{{ recipe }}</font></p></p></div></h4>
+    <div><p><p style="margin-left:1.5em">{{ recipe.description }}</p></div>
 
+    <div><ul>  {% for ingredient in recipe.ingredients %}
+        <li>{{ ingredient }}
+        {% endfor %}</li></ul></div>
 
   <form action="" method="post">
 

@@ -156,7 +156,7 @@ class ChangeQuantityIngredientForm(FlaskForm):
 
 
 class EditDescriptionForm(FlaskForm):
-    description = TextField('Description')
+    description = TextField('New description:')
     submit = SubmitField('                 Submit                 ')
 
 

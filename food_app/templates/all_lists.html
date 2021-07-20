@@ -5,6 +5,7 @@
 
     {% for shopping_list in shopping_lists %}
 <h4><div><p><p style="margin-left:1.5em">{{ shopping_list }}</p></div></h4>
+<div><p><p style="margin-left:1.5em">{{ shopping_list.notes }}</p></div>
 
     <div><ul>  {% for item in shopping_list.items %}
         <li>{{ item }}</li>

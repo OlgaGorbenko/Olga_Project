@@ -8,7 +8,7 @@
     <div><p><p style="margin-left:1.5em">{{ recipe.description }}</p></div>
 
 
-<form action="{{ url_for('edit_recipe_description', recipe_id=recipe.id, description_id=description.id) }}">
+<form action="{{ url_for('edit_recipe_description', recipe_id=recipe.id, recipe_description=recipe.description) }}">
     <p style="margin-left:0.7em"><input class="button" type="submit" value="Edit description">
 </form>
 
