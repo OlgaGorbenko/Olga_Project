@@ -7,6 +7,10 @@
 <h4><div><p><p style="margin-left:1.5em"><font color="#1e90ff">{{ shopping_list }}</font></p></p></div></h4>
 <div><p><p style="margin-left:1.5em">{{ shopping_list.notes }}</p></div>
 
+<form action="{{ url_for('add_notes_to_list', shopping_list_id=shopping_list.id, shopping_list_notes=shopping_list.notes) }}">
+    <p style="margin-left:0.7em"><input class="button" type="submit" value="Add Notes">
+</form>
+
     <div><ul>  {% for item in shopping_list.items %}
         <li>{{ item }}</li>
 

@@ -160,6 +160,11 @@ class EditDescriptionForm(FlaskForm):
     submit = SubmitField('                 Submit                 ')
 
 
+class AddNotesToListForm(FlaskForm):
+    notes = TextField('Add Notes:')
+    submit = SubmitField('                 Submit                 ')
+
+
 class SelectProductToAddForm(FlaskForm):
     select_product_to_add = QuerySelectField('Product', query_factory=all_products_titles, allow_blank=False)
     submit = SubmitField('  Select Product  ')

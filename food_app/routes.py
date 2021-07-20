@@ -4,7 +4,7 @@ from werkzeug.urls import url_parse
 
 from food_app.forms import LoginForm, RegistrationForm, AddProductForm, AddRecipeForm, NewShoppingListForm, \
     AddPortionsForm, AddProductToListForm, SelectProductToAddForm, AskDeleteShoppingListForm, ChangeQuantityItemForm, \
-    AddProductToRecipeForm, ChangeQuantityIngredientForm, AskDeleteRecipeForm, EditDescriptionForm
+    AddProductToRecipeForm, ChangeQuantityIngredientForm, AskDeleteRecipeForm, EditDescriptionForm, AddNotesToListForm
 from food_app.models import User, Product, Recipe, ShoppingList, Ingredient, ShoppingListItem
 from .app_factory import app, db
 
@@ -237,6 +237,22 @@ def edit_recipe_description(recipe_id, recipe_description):
         recipe.description = form.description.data
         db.session.commit()
         return redirect(url_for('edit_recipe', recipe_id=recipe_id, recipe_description=recipe_description))
+
+
+@app.route('/add_notes_to_list/<shopping_list_id>/<shopping_list_notes>', methods=['GET', 'POST'])
+@login_required
+def add_notes_to_list(shopping_list_id, shopping_list_notes):
+    shopping_list = ShoppingList.query.filter_by(id=shopping_list_id).first()
+    notes = ShoppingList.query.filter_by(notes=shopping_list_notes).first()
+    form = AddNotesToListForm()
+    if request.method == 'GET':
+        return render_template("add_notes_to_list.html", title='Do you want to add notes?', shopping_list=shopping_list, notes=notes,
+                               form=form)
+    if form.validate_on_submit():
+        shopping_list.notes = form.notes.data
+        db.session.commit()
+        return redirect(url_for('edit_shopping_list', shopping_list_id=shopping_list_id, shopping_list_notes=shopping_list_notes))
+
 
 
 

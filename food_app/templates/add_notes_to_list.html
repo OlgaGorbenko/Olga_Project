@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Do you want to add notes? </h1>
+
+
+<h4><div><p><p style="margin-left:1.5em"><font color="#1e90ff">{{ shopping_list }}</font></p></p></div></h4>
+    <div><p><p style="margin-left:1.5em">{{ shopping_list.notes }}</p></div>
+
+
+    <div><ul>  {% for item in shopping_list.items %}
+        <li>{{ item }}
+        {% endfor %}</li></ul></div>
+
+  <form action="" method="post">
+
+{{ form.hidden_tag() }}
+        <p>
+            <p style="margin-left:1.5em">{{ form.notes.label }} <br>
+
+            {{ form.notes }}<br>
+        </p>
+        <p><p style="margin-left:1.5em">{{ form.submit() }}</p>
+    </form></p>
+{% endblock %}
