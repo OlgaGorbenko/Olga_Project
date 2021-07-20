@@ -86,19 +86,38 @@ Make your choice :
 </div>        IT WORKS!!!
 
 =======================
-form for select product:
+@app.route('/add_recipe_to_shopping_list/<recipe_id>', methods=['GET', 'POST'])
+@login_required
+def add_portions(recipe_id):
+    current_recipe = Recipe.query.filter_by(id=recipe_id).first()
+    form = AddPortionsForm()
 
-<h3>Select Product for Shopping List</h3>
+    if not form.validate_on_submit():
+        return render_template(
+            "add_portions.html", title='Shopping List', current_recipe=current_recipe, form=form)
 
-  <form action="" method="post">
+    shopping_list = form.title_list.data
 
-        {{ form.hidden_tag() }}
-        <p>
-            <p style="margin-left:1.5em">{{ form.select_product_to_add.label }}<br>
-            {{ form.select_product_to_add }}<br>
-        </p>
-        <p><p style="margin-left:1.5em">{{ form.submit() }}</p>
-    </form></p>
+    for ingredient in current_recipe.ingredients:
+
+        filtered_items = list(filter(
+            lambda item: ingredient.product_id == item.product_id,
+            shopping_list.items
+        ))
+
+        if filtered_items:
+            item = filtered_items[0]
+        else:
+            item = ShoppingListItem(product_id=ingredient.product_id,
+                                    unit_of_measure=ingredient.unit_of_measure,
+                                    quantity=0)
+            shopping_list.items.append(item)
+
+        item.quantity += ingredient.quantity * int(form.number_of_portions.data)
+
+        db.session.commit()
+    return redirect(url_for('all_lists'))
+
 =================================================
  	Rinse the rice. Cut the meat, carrots and onions into 0,5-1 cm cubes. Put all the ingredients into the bowl, add vegetable olive oil, salt and spices and properly stir. Put the rice into the bowl. Add water and garlic on the top. Close the lid of multicooker. Set the program PILAF, set the time for 45 minutes. Cook until the program ends.
 Pilaf
@@ -133,6 +152,9 @@ Scrambled Eggs
 
 Preheat the oven to 160C and flour a ring or bundt tin approximately 23cm in diameter,. In a large bowl, mix together the flour, baking powder and sugar. In another bowl, whisk together the ricotta and olive oil, then add the eggs one by one, beating between each addition, until smooth. Add the ricotta mixture to the flour mixture and whisk until you have a thick batter. Add the lemon zest, stir again, then pour the batter into the prepared tin. Bake for 30-40 minutes if you are using a ring tin or until the cake is golden and fully set. Allow the cake to cool before turning it out of the tin and on to a plate.
 Ricotta and lemon ring cake
+https://www.theguardian.com/food/2021/may/24/ciambellone-di-ricotta-e-limon-ricotta-and-lemon-ring-cake-by-rachel-roddy
+====
+
 
 <img src="https://images.unsplash.com/photo-1493770348161-369560ae357d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80" alt="Trulli" width="470" height="300" vspace="5" hspace="5">
 =====

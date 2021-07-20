@@ -61,7 +61,7 @@ class AddProductForm(FlaskForm):
 class AddRecipeForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     # ingredients = StringField('Ingredients')
-    description = TextField('Description')
+    description = TextField('Description', validators=[DataRequired()])
     submit = SubmitField('   Add   ')
 
     def validate_title(self, title):

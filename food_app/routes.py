@@ -254,9 +254,6 @@ def add_notes_to_list(shopping_list_id, shopping_list_notes):
         return redirect(url_for('edit_shopping_list', shopping_list_id=shopping_list_id, shopping_list_notes=shopping_list_notes))
 
 
-
-
-
 @app.route('/edit_shopping_list/<shopping_list_id>', methods=['GET', 'POST'])
 @login_required
 def edit_shopping_list(shopping_list_id):
@@ -404,23 +401,30 @@ def add_portions(recipe_id):
 
     for ingredient in current_recipe.ingredients:
 
-        filtered_items = list(filter(
-            lambda item: ingredient.product_id == item.product_id,
-            shopping_list.items
-        ))
+        if ingredient is None:
+            return render_template(
+                "add_portions.html", title='Shopping List', current_recipe=current_recipe, form=form)
 
-        if filtered_items:
-            item = filtered_items[0]
         else:
-            item = ShoppingListItem(product_id=ingredient.product_id,
-                                    unit_of_measure=ingredient.unit_of_measure,
-                                    quantity=0)
-            shopping_list.items.append(item)
+            filtered_items = list(filter(
+                lambda item: ingredient.product_id == item.product_id,
+                shopping_list.items
+            ))
 
-        item.quantity += ingredient.quantity * int(form.number_of_portions.data)
+            if filtered_items:
+                item = filtered_items[0]
+            else:
+                item = ShoppingListItem(product_id=ingredient.product_id,
+                                        unit_of_measure=ingredient.unit_of_measure,
+                                        quantity=0)
+                shopping_list.items.append(item)
 
-        db.session.commit()
+            item.quantity += ingredient.quantity * int(form.number_of_portions.data)
+
+            db.session.commit()
     return redirect(url_for('all_lists'))
+
+
 
 
 
