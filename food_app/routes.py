@@ -19,7 +19,7 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, you are now a registered user!')
+        # flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -90,7 +90,7 @@ def add_product():
                           unit_of_measure=form.unit_of_measure.data)
         db.session.add(product)
         db.session.commit()
-        flash('New product has been successfully added!')
+        # flash('New product has been successfully added!')
         return redirect(url_for('product'))
     return render_template('add_product.html', title='Add Product', form=form)
 
@@ -135,7 +135,7 @@ def add_recipe():
         recipe = Recipe(title=form.title.data, owner=current_user.id, description=form.description.data)
         db.session.add(recipe)
         db.session.commit()
-        flash('New recipe has been successfully added!')
+        # flash('New recipe has been successfully added!')
         return redirect(url_for('recipe'))
     return render_template('add_recipe.html', title='Recipe', form=form)
 
@@ -189,7 +189,7 @@ def add_product_to_recipe(product_id):
         )
         db.session.add(ingredient)
         db.session.commit()
-        flash('New ingredient has been successfully added!')
+        # flash('New ingredient has been successfully added!')
         return redirect(url_for('all_products'))
 
 
@@ -211,7 +211,7 @@ def new_list():
         shopping_list = ShoppingList(title=form.title.data, owner=current_user.id, notes=form.notes.data)
         db.session.add(shopping_list)
         db.session.commit()
-        flash('New shopping list has been successfully created!')
+        # flash('New shopping list has been successfully created!')
         return redirect(url_for('all_lists'))
     return render_template('new_list.html', title='ShoppingList', form=form)
 
@@ -382,7 +382,7 @@ def add_product_to_list(product_id):
     item.quantity += form.quantity.data
     db.session.commit()
 
-    flash('Item have been successfully added!')
+    # flash('Item have been successfully added!')
 
     return redirect(url_for('all_lists'))
 
